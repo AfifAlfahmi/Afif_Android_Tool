@@ -1,0 +1,31 @@
+
+TYPE CON>test.py
+py -m pip install --upgrade pip setuptools virtualenv
+
+py -m virtualenv kivy_venv
+
+kivy_venv\Scripts\activate
+
+py -m pip install kivy[base] kivy_examples
+
+
+ python -m pip install docutils pygments pypiwin32 kivy.deps.sdl2 kivy.deps.glew
+
+ python -m pip install kivy.deps.gstreamer
+
+ python -m pip install kivy.deps.angle
+
+ python -m pip install kivy
+
+
+
+
+///////////////////////////examples
+
+row_forse_default = True,
+row_default_height=40,
+col_force_default=True,
+col_default_width=100
+
+
+

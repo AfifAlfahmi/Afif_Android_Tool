@@ -1,0 +1,193 @@
+<Certificate>
+    outKeyFile:outKeyFile
+    c_name:c_name
+    org :org
+    loc :loc
+    country :country
+    storePass : storePass
+    keyPass :keyPass
+    alias: alias
+
+    FloatLayout:
+        size: root.width,self.parent.height
+        size_hint: None, None # <---
+        id: certLayout
+        canvas.before:
+            Color:
+                #rgba: 1, 0.3, 0.2, 1
+                rgb: utils.get_color_from_hex('#0080ff')
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            size_hint: None, None # <---
+            pos_hint: {"x":0.5, "top":1.05}
+            text: "Generate Cert"
+
+        FloatLayout:
+            #padding:30
+            #spacing: 20
+            #cols: 2
+            #rows: 2
+            #pos_hint: {'center_x':.14}
+            canvas.before:
+                Color:
+                    #rgba: 1, 0.3, 0.2, 1
+                    rgb: utils.get_color_from_hex('#80ff00')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size:self.parent.width*0.6,self.parent.height*0.88
+            pos_hint: {"x":0.24, "top":0.9}
+            pos: self.pos
+            size_hint: None, None # <---
+            Label:
+                text:"out Key File: "
+                font_size:root.width*0.025
+                pos_hint: {"x":0.13, "top":0.9}
+                size:self.parent.width*0.1,self.parent.height*0.05
+                size_hint: None, None # <---
+
+            TextInput:
+                id: outKeyFile
+                font_size: 18
+                multiline: False
+                pos_hint: {"x": 0.30 , "top":0.9}
+                size:self.parent.width*0.5,self.parent.height*0.08
+                size_hint: None, None # <---
+
+            Label:
+                text:"CName: "
+                font_size: root.width*0.025
+
+                pos_hint: {"x":0.13, "top":0.8}
+                size: self.parent.width*0.15,self.parent.height*0.05
+                size_hint: None, None # <---
+
+
+            TextInput:
+                id: c_name
+                font_size: 18
+                multiline: False
+
+                pos_hint: {"x": 0.30, "top":0.8}
+                size:self.parent.width*0.5,self.parent.height*0.08
+                size_hint: None, None # <---
+                #size_hint: 0.04, 0.03
+            Label:
+                text:"Alias:"
+                font_size: root.width*0.025
+
+                pos_hint: {"x":0.13, "top":0.7}
+                size: self.parent.width*0.15,self.parent.height*0.05
+                size_hint: None, None # <---
+
+
+            TextInput:
+                id: alias
+                font_size: 18
+                multiline: False
+                pos_hint: {"x": 0.30, "top":0.7}
+                size:self.parent.width*0.5,self.parent.height*0.08
+                size_hint: None, None # <---
+                #size_hint: 0.04, 0.03
+            Label:
+                text:"org:"
+                font_size: root.width*0.025
+
+                pos_hint: {"x":0.13, "top":0.6}
+                size: self.parent.width*0.15,self.parent.height*0.05
+                size_hint: None, None # <---
+
+
+            TextInput:
+                id: org
+                font_size: 18
+                multiline: False
+                pos_hint: {"x": 0.30, "top":0.6}
+                size:self.parent.width*0.5,self.parent.height*0.08
+                size_hint: None, None # <---
+                #size_hint: 0.04, 0.03
+            Label:
+                text:"loc:"
+                font_size: root.width*0.025
+
+                pos_hint: {"x":0.13, "top":0.5}
+                size: self.parent.width*0.15,self.parent.height*0.05
+                size_hint: None, None # <---
+
+
+            TextInput:
+                id: loc
+                font_size: 18
+                multiline: False
+                pos_hint: {"x": 0.30, "top":0.5}
+                size:self.parent.width*0.5,self.parent.height*0.08
+                size_hint: None, None # <---
+                #size_hint: 0.04, 0.03
+
+
+
+            Label:
+                text:"country:"
+                font_size: root.width*0.025
+
+                pos_hint: {"x":0.13, "top":0.4}
+                size: self.parent.width*0.15,self.parent.height*0.05
+                size_hint: None, None # <---
+
+
+            TextInput:
+                id: country
+                font_size: 18
+                multiline: False
+                password: True
+                pos_hint: {"x": 0.30, "top":0.4}
+                size:self.parent.width*0.5,self.parent.height*0.08
+                size_hint: None, None # <---
+                #size_hint: 0.04, 0.03
+            Label:
+                text:"store Pass: "
+                font_size: root.width*0.025
+
+                pos_hint: {"x":0.13, "top":0.3}
+                size: self.parent.width*0.15,self.parent.height*0.05
+                size_hint: None, None # <---
+
+
+            TextInput:
+                id: storePass
+                font_size: 18
+                multiline: False
+                pos_hint: {"x": 0.30, "top":0.3}
+                size:self.parent.width*0.5,self.parent.height*0.08
+                size_hint: None, None # <---
+                #size_hint: 0.04, 0.03
+
+            Label:
+                text:"keyPass: "
+                font_size: root.width*0.025
+
+                pos_hint: {"x":0.13, "top":0.2}
+                size: self.parent.width*0.15,self.parent.height*0.05
+                size_hint: None, None # <---
+
+
+            TextInput:
+                id: keyPass
+                font_size: 18
+                multiline: False
+                password: True
+                pos_hint: {"x": 0.30, "top":0.2}
+                size:self.parent.width*0.5,self.parent.height*0.08
+                size_hint: None, None # <---
+                #size_hint: 0.04, 0.03
+
+        Button:
+            id: creCertBtn
+            pos_hint:{"x":0.5,"y":0.06}
+            size: 100, 30
+            size_hint: None, None # <---
+            font_size: 18
+            text: "Create"
+            # on_release:

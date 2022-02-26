@@ -1,0 +1,56 @@
+#:import utils kivy.utils
+
+<Patch>
+    apk_path_et:apk_path_et
+
+
+    FloatLayout:
+        size_hint: None, None # <---
+        size: root.width,self.parent.height
+
+        pos_hint: {"center_x":0.3, "center_y":0.9}
+        id:patchLayout
+        opacity:0
+        canvas.before:
+            Color:
+                #rgba: 1, 0.3, 0.2, 1
+                rgb: utils.get_color_from_hex('#0080ff')
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: "Patch Apk"
+            size_hint: None, None # <---
+            pos_hint: {"x":0.5, "top":1.05}
+        FloatLayout:
+
+            canvas.before:
+                Color:
+                    #rgba: 1, 0.3, 0.2, 1
+                    rgb: utils.get_color_from_hex('#80ff00')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size:self.parent.width*0.6,self.parent.height*0.88
+            pos_hint: {"x":0.24, "top":0.9}
+            pos: self.pos
+            size_hint: None, None # <---
+            Button
+                text: "Select Apk"
+                pos_hint:{"center_x": .2,"y":.75}
+                size:root.width*0.12,root.height*0.1
+                id: uploadApkBtn
+                size_hint: None, None # <---
+            TextInput:
+                id: apk_path_et
+                size:self.parent.width*0.5,self.parent.height*0.08
+                size_hint: None, None # <---
+                pos_hint: {"x":0.30, "y":.8}
+
+
+            Button
+                text: "Make it Debuggable"
+                pos_hint:{"center_x": .5,"center_y":.1}
+                size:root.width*0.15,root.height*0.05
+                id: debugApkBtn
+                size_hint: None, None # <---

@@ -1,0 +1,52 @@
+#:import utils kivy.utils
+
+<Navbar>
+    FloatLayout:
+
+        size: root.width- 20, root.height*0.17
+        canvas.before:
+            Color:
+                #rgba: 1, 0.3, 0.2, 1
+                rgb: utils.get_color_from_hex('#1b16b6')
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        pos: 0, root.height-root.height*0.17
+        background_color: 0.5,.3,.5,1
+
+        BoxLayout:
+            orientation: "horizontal" #vertical
+            size: root.width,root.height*0.17
+            size_hint: None, None # <---
+            pos_hint: {"x":0, "y":0}
+            #pos: 10, root.height-100
+            #padding:20
+            spacing:10
+            canvas.before:
+                Color:
+                    #rgba: 153, 102, 51, 1
+                    rgb: utils.get_color_from_hex('#996633')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            Button:
+                text: "Apk"
+                id: apkbtn
+                size: 100, 100
+                size_hint: None, None # <---
+                pos_hint: {"x":0, "y":0}
+
+
+            Button:
+                text: "Device"
+                id: devbtn
+                size: 100, 100
+                size_hint: None, None # <---
+                pos_hint: {"x":0, "y":0}
+                #on_release:
+                    #self.parent.parent.parent.parent.nav.ids.nav_label.text = "uqu"
+                    #app.homeScreen.toDevice(self)
+                    #self.parent.parent.parent.parent.toDevice()
+
+
