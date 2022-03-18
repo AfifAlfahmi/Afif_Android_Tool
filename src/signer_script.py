@@ -53,12 +53,16 @@ def unzipApk(apk):
     print(" Unzip the apk file in workingdir ")
     zip_ref = zipfile.ZipFile(apk, 'r')
     cwd = os.getcwd()
-    zip_ref.extractall(f'{cwd}\workDir')
+    apkPath = Path(apk)
+    appFolder = apkPath.stem
+    # appFolder = f'{cwd}\{apk.name}'
+
+    zip_ref.extractall(f'{cwd}\{appFolder}')
     # zip_ref.close()
 
 
 
-    return workingdir
+    return appFolder
 
     #zipApk(workingdir)
 
@@ -74,23 +78,23 @@ def zipApk(appFolder):
 
 
 
-outKeyFile = "afif_ba.jks"
+outKeyFile = "afif.jks"
 cName ="Afif"
 orgUnit = "learning"
 org = "UQU"
 location = "makkah"
 state = "makkah"
 country = "sa"
-newKeyPass = "Gndnd_213"
-newStorePass = "Gndnd_000"
+newKeyPass = "wr4k_fmwlgdf"
+newStorePass = "xd8j42k_gskl"
 
-newAlias = "keytop"
+newAlias = "alias"
 #generateCert(outKeyFile,cName,orgUnit,org,location,state,country,newKeyPass,newStorePass,newAlias)
 
 #print(" Signing the APK")
-storePass = "Gfds_8899"
-keyPass = "Gfds_9010"
-keyStore = "geo_store.jks"
+storePass = "lkglgefsfkd_"
+keyPass = "gszlgsdglffl"
+keyStore = "store.jks"
 alias = "key0"
 apk= "nat_rel.apk"
 #unzipApk(apk)

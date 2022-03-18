@@ -14,7 +14,7 @@
         canvas.before:
             Color:
                 #rgba: 1, 0.3, 0.2, 1
-                rgb: utils.get_color_from_hex('#0080ff')
+                rgb: utils.get_color_from_hex('#000000')
             Rectangle:
                 pos: self.pos
                 size: self.size
@@ -27,7 +27,7 @@
             canvas.before:
                 Color:
                     #rgba: 1, 0.3, 0.2, 1
-                    rgb: utils.get_color_from_hex('#80ff00')
+                    rgb: utils.get_color_from_hex('#000000')
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -43,14 +43,14 @@
                 size_hint: None, None # <---
             TextInput:
                 id: apk_path_et
-                size:self.parent.width*0.5,self.parent.height*0.08
+                size:self.parent.width*0.5,self.parent.height*0.10
                 size_hint: None, None # <---
-                pos_hint: {"x":0.30, "y":.8}
+                pos_hint: {"x":0.30, "y":.76}
 
 
             Button
                 text: "Make it Debuggable"
-                pos_hint:{"center_x": .5,"center_y":.1}
-                size:root.width*0.15,root.height*0.05
+                pos_hint:{"center_x": .5,"center_y":.4}
+                size:root.width*0.20,root.height*0.05
                 id: debugApkBtn
                 size_hint: None, None # <---
