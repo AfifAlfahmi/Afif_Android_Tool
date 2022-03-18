@@ -14,38 +14,41 @@
 
         pos_hint: {"center_x":0.3, "center_y":0.9}
         id: signLayout
-        opacity:0
         canvas.before:
             Color:
                 #rgba: 1, 0.3, 0.2, 1
-                rgb: utils.get_color_from_hex('#0080ff')
+                rgb: utils.get_color_from_hex('#000000')
             Rectangle:
                 pos: self.pos
                 size: self.size
+        Label:
+            text: "Sign Apk"
+            size_hint: None, None # <---
+            pos_hint: {"x":0.5, "top":1.05}
         FloatLayout:
 
             canvas.before:
                 Color:
                     #rgba: 1, 0.3, 0.2, 1
-                    rgb: utils.get_color_from_hex('#80ff00')
+                    rgb: utils.get_color_from_hex('#000000')
                 Rectangle:
                     pos: self.pos
                     size: self.size
-            size:self.parent.width*0.6,self.parent.height*0.88
+            size:self.parent.width*0.8,self.parent.height*0.88
             pos_hint: {"x":0.24, "top":0.9}
             pos: self.pos
             size_hint: None, None # <---
             Button
                 text: "Select Apk"
-                pos_hint:{"center_x": .2,"y":.75}
+                pos_hint:{"center_x": .17,"y":.75}
                 size:root.width*0.12,root.height*0.1
                 id: uploadApkBtn
                 size_hint: None, None # <---
             TextInput:
                 id: apk_path_et
-                size:self.parent.width*0.5,self.parent.height*0.08
+                size:self.parent.width*0.45,self.parent.height*0.08
                 size_hint: None, None # <---
-                pos_hint: {"x":0.30, "y":.8}
+                pos_hint: {"x":0.30, "y":.78}
             Label:
                 text: "Test Sign"
                 font_size:20
@@ -86,7 +89,7 @@
                 canvas.before:
                     Color:
                         #rgba: 1, 0.3, 0.2, 1
-                        rgb: utils.get_color_from_hex('#ffffcc')
+                        rgb: utils.get_color_from_hex('#000000')
                     Rectangle:
                         pos: self.pos
                         size: self.size
@@ -177,9 +180,11 @@
                 size:root.width*0.15,root.height*0.05
                 id: signApkBtn
                 size_hint: None, None # <---
+            Button
+                text: "New Cert"
+                pos_hint:{"center_x": .5,"center_y":.05}
+                size:root.width*0.15,root.height*0.05
+                id: newCertBtn
+                size_hint: None, None # <---
 
 
-        Label:
-            text: "Sign Apk"
-            size_hint: None, None # <---
-            pos_hint: {"x":0.5, "top":1.05}

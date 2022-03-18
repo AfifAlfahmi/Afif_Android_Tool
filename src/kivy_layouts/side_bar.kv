@@ -12,18 +12,11 @@
         canvas.before:
             Color:
                 #rgba: 1, 0.3, 0.2, 1
-                rgb: utils.get_color_from_hex('#00ff00')
+                rgb: utils.get_color_from_hex('#996633')
             Rectangle:
                 pos: self.pos
                 size: self.size
-        Button:
-            text: "Generate Cert"
-            id: certBtn
-            size: root.width*0.12,root.height*0.1
-            size_hint: None, None # <---
-            pos: 10,250
-            #pos_hint: {"x":0, "y":0.9}
-            pos_hint:{'top': 0.5}
+
 
         Button:
             text: "Sign Apk"
