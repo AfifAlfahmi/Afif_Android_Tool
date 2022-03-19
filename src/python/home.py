@@ -17,6 +17,7 @@ from plyer import filechooser
 #     root.add_widget(slider)
 from src.python.Apk import Apk
 from src.python.Certificate import Certificate
+from src.python.Device import Device
 from src.python.Sidebar import Sidebar
 from src.python.Sign import Sign
 from src.signer_script import *
@@ -68,11 +69,6 @@ class Navbar(Widget):
 
 
 
-Builder.load_file("../kivy_layouts/certificate.kv")
-
-
-class Device(Widget):
-    pass
 
 
 # class Navbar(Widget):

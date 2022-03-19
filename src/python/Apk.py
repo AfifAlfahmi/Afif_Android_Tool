@@ -98,6 +98,7 @@ class Apk(Widget):
         self.apkLayout.add_widget(self.sidebar)
 
     def toSign(self):
+        print("to sign")
 
         #self.certLayout.opacity = 0
         if not self.signLayoutDisplayed:

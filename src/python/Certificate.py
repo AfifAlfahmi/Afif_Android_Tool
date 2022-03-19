@@ -5,6 +5,7 @@ from kivy.uix.widget import Widget
 
 from src.signer_script import generateCert
 
+Builder.load_file("../kivy_layouts/certificate.kv")
 
 class Certificate(Widget):
     outKeyFile = ObjectProperty(None)
