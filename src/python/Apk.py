@@ -30,8 +30,8 @@ class Apk(Widget):
         #self.apkLayout.add_widget(self.certLayout)
         #self.apkLayout.add_widget(self.patchLayout)
         self.apkLayout.add_widget(self.sidebar)
-        self.signBtn = self.sidebar.ids.signBtn
-        self.patchBtn = self.sidebar.ids.patchBtn
+        self.signBtn = self.sidebar.ids.btn1
+        self.patchBtn = self.sidebar.ids.btn2
         self.uploadApkBtn = self.signLayout.ids.uploadApkBtn
         self.selCertBtn = self.signLayout.ids.selCertBtn
         self.newCertBtn = self.signLayout.ids.newCertBtn
