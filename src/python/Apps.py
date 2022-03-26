@@ -17,6 +17,7 @@ class Apps(Widget):
         self.appsGradeLayout = self.ids.appsGradeLayout
         self.appsGradeLayout.bind(minimum_height=self.appsGradeLayout.setter('height'))
         client = AdbClient(host="127.0.0.1", port=5037)
+
         devices = client.devices()
         if len(devices) > 0:
             print("found devices")
