@@ -5,7 +5,7 @@
 
     FloatLayout:
         size_hint: None, None # <---
-        size: root.width-100,self.parent.height
+        size: root.width,self.parent.height
 
 
         pos_hint: {"center_x":0.7, "center_y":0.9}
@@ -23,21 +23,7 @@
             text: "Apps List"
             size_hint: None, None # <---
             pos_hint: {"x":0.5, "top":1.05}
-        FloatLayout:
-            size_hint: None, None # <---
-            size: root.width-300,self.parent.height
-            id:recViewLayout
 
-            canvas.before:
-                Color:
-                    #rgba: 1, 0.3, 0.2, 1
-                    rgb: utils.get_color_from_hex('#0080ff')
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-            size:self.parent.width*0.8,self.parent.height*0.88
-            pos_hint: {"x":0.15, "top":0.9}
-            pos: self.pos
         ScrollView:
 
             do_scroll_x: True
@@ -45,7 +31,7 @@
             id:sclContainer
             size_hint: None, None # <---
             size:root.width*0.5,root.height*0.7
-            pos_hint: {"x":0.27, "top":0.80}
+            pos_hint: {"x":0.30, "top":0.80}
             GridLayout:
                 id:appsGradeLayout
                 cols:2

@@ -1,0 +1,64 @@
+#:import utils kivy.utils
+
+<File>
+
+
+    FloatLayout:
+        size_hint: None, None # <---
+        size: root.width,self.parent.height
+
+
+        pos_hint: {"center_x":0.7, "center_y":0.9}
+        size_hint: None, None # <---
+        id:filesLayout
+        opacity:1
+        canvas.before:
+            Color:
+                #rgba: 1, 0.3, 0.2, 1
+                rgb: utils.get_color_from_hex('#80ff00')
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: "Files"
+            size_hint: None, None # <---
+            pos_hint: {"x":0.5, "top":1.05}
+        FloatLayout:
+            size_hint: None, None # <---
+            size: root.width-300,self.parent.height
+
+            canvas.before:
+                Color:
+                    #rgba: 1, 0.3, 0.2, 1
+                    rgb: utils.get_color_from_hex('#0080ff')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size:self.parent.width*0.8,self.parent.height*0.88
+            pos_hint: {"x":0.16, "top":0.9}
+            pos: self.pos
+            Button
+                text: "Select file"
+                pos_hint:{"center_x": .17,"y":.75}
+                size:root.width*0.12,root.height*0.1
+                id: selFileBtn
+                size_hint: None, None # <---
+
+
+            Spinner:
+                id: spinner
+                values: '/data/local/tmp', '/data/bin', '/sdcard/Download/','/system/bin'
+                size:root.width*0.24,root.height*0.1
+                size_hint: None, None # <---
+                pos_hint:{"center_x": .40,"y":.75}
+                text:"destination"
+                on_text: root.spinner_clicked(spinner.text)
+
+
+            Button
+                text: "Push"
+                pos_hint:{"center_x": .7,"y":.75}
+                size:root.width*0.12,root.height*0.1
+                id: pushFileBtn
+                size_hint: None, None # <---
+

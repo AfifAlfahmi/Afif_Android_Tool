@@ -27,13 +27,15 @@ class WindowManager(ScreenManager):
 
 
 class HomeScreen(Screen):
+    isDeviceLayoutDispalyed = False
+
 
     def __init__(self, **kwargs):
         super(HomeScreen, self).__init__(**kwargs)
         self.box_layout = BoxLayout()
         self.nav = Navbar()
         self.apk = Apk()
-        self.device = Device()
+
         self.box_layout.add_widget(
             Label(text="Afif Grid//////////////////////////////////////////////////////////////////////"))
         # self.add_widget(self.box_layout)
@@ -45,17 +47,20 @@ class HomeScreen(Screen):
         self.toApkBtn.bind(on_press=lambda x: self.toApk())
 
     def toDevice(self):
+        self.device = Device()
         self.remove_widget(self.apk)
         self.remove_widget(self.device)
 
         self.add_widget(self.device)
+        self.isDeviceLayoutDispalyed = True
         # self.nav.ids.nav_label.text = "Alfahmi"
         # self.parent.ids.
 
     def toApk(self):
-        self.remove_widget(self.device)
-        self.remove_widget(self.apk)
-        self.add_widget(self.apk)
+        if self.isDeviceLayoutDispalyed:
+            self.remove_widget(self.device)
+            self.remove_widget(self.apk)
+            self.add_widget(self.apk)
 
 
 
