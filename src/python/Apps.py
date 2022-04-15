@@ -15,6 +15,7 @@ class Apps(Widget):
     def __init__(self, **kwargs):
         super(Apps, self).__init__(**kwargs)
         self.appsGradeLayout = self.ids.appsGradeLayout
+        # self.appsGradeLayout.size_hint_y = (None)
         self.appsGradeLayout.bind(minimum_height=self.appsGradeLayout.setter('height'))
         client = AdbClient(host="127.0.0.1", port=5037)
 
