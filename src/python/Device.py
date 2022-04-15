@@ -38,6 +38,8 @@ class Device(Widget):
 
         self.appsBtn = self.sidebar.ids.btn1
         self.filesBtn = self.sidebar.ids.btn2
+        self.sidebar.ids.btn3.opacity = 0
+
 
         self.appsBtn.text = self.appsMenuItem
         self.filesBtn.text = self.filesMenuItem
