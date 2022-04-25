@@ -6,12 +6,37 @@ import tempfile
 import os
 import pathlib
 from pathlib import Path
+
+
+
+def testSignApk(apk):
+    cName = "Afif"
+    orgUnit = "learning"
+    org = "UQU"
+    location = "makkah"
+    state = "makkah"
+    country = "sa"
+    keyPass = "wr4k_fmwlgdf"
+    storePass = "xd8j42k_gskl"
+    script = os.path.dirname(__file__)
+    homeDir = Path(script).parent.absolute()
+    keyPath = Path(homeDir/"workDir/certs/test_cert.jks")
+
+    alias = "alias1"
+    print("apk signer")
+    print(os.getcwd())
+    apk_sign_comm = f"C:\\Users\\Afif\\python_projects\\afif_android_tool\\src\\apksigner.bat sign --v2-signing-enabled --ks {keyPath} --ks-key-alias {alias} --ks-pass pass:{storePass} --key-pass pass:{keyPass} {apk}"
+
+    p = subprocess.run(apk_sign_comm, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False)
+    if p.returncode > 0:
+        print(p.stdout.decode("utf8"))
+
 def signApk(apk,keyPath,storePass,keyPass,alias):
 
     if 1>0:
         print("apk signer")
         print(os.getcwd())
-        apk_sign_comm = f"C:\\Users\\Afif\\python_projects\\afif_android_tool\\src\\apksigner.bat sign --v2-signing-enabled --ks {keyPath} --ks-key-alias {alias} --ks-pass pass:{storePass} {apk}"
+        apk_sign_comm = f"C:\\Users\\Afif\\python_projects\\afif_android_tool\\src\\apksigner.bat sign --v2-signing-enabled --ks {keyPath} --ks-key-alias {alias} --ks-pass pass:{storePass} --key-pass pass:{keyPass} {apk}"
 
         p = subprocess.run(apk_sign_comm, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False)
         if p.returncode > 0:
@@ -57,12 +82,21 @@ def unzipApk(apk):
     appFolder = apkPath.stem
     # appFolder = f'{cwd}\{apk.name}'
 
-    zip_ref.extractall(f'{cwd}\{appFolder}')
+    print(f"app folder{appFolder}  ")
+    script = os.path.dirname(__file__)
+    homeDir = Path(script).parent.absolute()
+    workDir = Path(homeDir/"workDir")
+    distDir = Path(workDir/appFolder)
+
+
+    zip_ref.extractall(distDir)
+
+    print(f"dist folder path {script}")
     # zip_ref.close()
 
 
 
-    return appFolder
+    return distDir
 
     #zipApk(workingdir)
 
@@ -78,25 +112,11 @@ def zipApk(appFolder):
 
 
 
-outKeyFile = "afif.jks"
-cName ="Afif"
-orgUnit = "learning"
-org = "UQU"
-location = "makkah"
-state = "makkah"
-country = "sa"
-newKeyPass = "wr4k_fmwlgdf"
-newStorePass = "xd8j42k_gskl"
 
-newAlias = "alias"
 #generateCert(outKeyFile,cName,orgUnit,org,location,state,country,newKeyPass,newStorePass,newAlias)
 
 #print(" Signing the APK")
-storePass = "lkglgefsfkd_"
-keyPass = "gszlgsdglffl"
-keyStore = "store.jks"
-alias = "key0"
-apk= "nat_rel.apk"
+
 #unzipApk(apk)
 #signApk(apk,outKeyFile,newStorePass,newKeyPass,newAlias)
 
