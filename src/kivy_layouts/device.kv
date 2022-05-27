@@ -1,8 +1,9 @@
-
-
+#:import utils kivy.utils
+#:import OneLineListItem kivymd.uix.list
 <Device>
     FloatLayout:
-        size: root.width- 20,root.height*0.83
+        id: deviceLayout
+        size: root.width,root.height*0.83
         canvas.before:
             Color:
                 #rgba: 1, 0.3, 0.2, 1
@@ -11,8 +12,12 @@
                 pos: self.pos
                 size: self.size
 
-        Button:
-            text: "Device"
-            size: 100, 100
-            size_hint: None, None # <---
-            pos_hint: {"x":0, "y":0}
+
+
+
+
+
+
+
+
+

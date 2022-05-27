@@ -1,0 +1,41 @@
+#:import utils kivy.utils
+
+<Apps>
+
+
+    FloatLayout:
+        size_hint: None, None # <---
+        size: root.width,self.parent.height
+
+
+        pos_hint: {"center_x":0.7, "center_y":0.9}
+        size_hint: None, None # <---
+        id:appsLayout
+        opacity:1
+        canvas.before:
+            Color:
+                #rgba: 1, 0.3, 0.2, 1
+                rgb: utils.get_color_from_hex('#80ff00')
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: "Apps List"
+            size_hint: None, None # <---
+            pos_hint: {"x":0.5, "top":1.05}
+
+        ScrollView:
+
+            do_scroll_x: True
+            do_scroll_y: True
+            id:sclContainer
+            size_hint: None, None # <---
+            size:root.width*0.5,root.height*0.7
+            pos_hint: {"x":0.30, "top":0.80}
+            GridLayout:
+                id:appsGradeLayout
+                cols:2
+                spacing:10
+                size_hint: None, None # <---
+                size:root.width*0.5,self.parent.height*0.2
+                minimum_height:self.height
