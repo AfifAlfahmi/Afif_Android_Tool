@@ -1,7 +1,11 @@
+import os
+from pathlib import Path
 
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
 from plyer import filechooser
+
+from src.logs_patch import logFunName, logJavaFunName
 from src.python.Certificate import Certificate
 from src.python.Dynamic import Dynamic
 from src.python.Sidebar import Sidebar
@@ -87,8 +91,17 @@ class Apk(Widget):
                 print(selection[0])
 
     def makeApkDebuggable(self):
-        print(f"unzipped apk {unzipApk(self.selectedApk)}")
+        #print(f"unzipped apk {unzipApk(self.selectedApk)}")
         #patchManifestDebuggable()
+        scriptPath = os.path.dirname(__file__)
+        srcDir = Path(scriptPath).parent.absolute()
+        projectPath = Path(srcDir/"funs")
+
+        project = "src/funs"
+
+        logFunName(projectPath,"com.afif.tool")
+        #logJavaFunName(projectPath,"com.afif.tool")
+
 
     def toCert(self):
         print("start to cert")

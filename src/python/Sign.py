@@ -3,7 +3,7 @@ from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.uix.widget import Widget
 
-from src.signer_script import signApk
+from src.signer_script import signApk, testSignApk
 
 Builder.load_file("../kivy_layouts/sign_layout.kv")
 
@@ -13,6 +13,8 @@ class Sign(Widget):
     signStorePass: ObjectProperty(None)
     signAlias: ObjectProperty(None)
     signKeyPass: ObjectProperty(None)
+    isProdSign = True
+    isTestSign = False
     def __init__(self, **kwargs):
         super(Sign, self).__init__(**kwargs)
         self.signApkBtn = self.ids.signApkBtn
@@ -44,12 +46,21 @@ class Sign(Widget):
         keyPass = self.signKeyPass.text
         alias = self.signAlias.text
         print(f'alias {alias}')
-        if (not apkPath or not keyPath or not storePass or not keyPass or not alias):
-            print(f'empty apk path {apkPath}')
+
+        if self.isProdSign:
+            print(f'prod sign selected')
+
+            if (not apkPath or not keyPath or not storePass or not keyPass or not alias):
+                print(f'empty apk path {apkPath}')
+            else:
+                print(f'not empty apk path {apkPath}')
+                # unzipApk(apkPath)
+                signApk(apkPath, keyPath, storePass, keyPass, alias)
+
         else:
-            print(f'not empty apk path {apkPath}')
+            print(f'test sign selected')
             #unzipApk(apkPath)
-            signApk(apkPath,keyPath,storePass,keyPass,alias)
+            testSignApk(apkPath)
 
     def on_checkbox_Active(self,checkboxInstance, isActive):
 
@@ -67,12 +78,17 @@ class Sign(Widget):
         else:
              print("all unchecked")
 
+
     def prodSign(self):
         self.prodSignLayout.opacity = 1
         self.signApkBtn.pos_hint = {'center_x': .5, 'center_y': .1}
+        self.isProdSign = True
+        self.isTestSign = False
 
     def testSign(self):
         self.prodSignLayout.opacity = 0
         self.signApkBtn.pos_hint = {'center_x': .5, 'center_y': .5}
+        self.isTestSign = True
+        self.isProdSign = False
 
     pass

@@ -28,4 +28,77 @@ col_force_default=True,
 col_default_width=100
 
 
+/////////////
+
+
+
+    Use functools.partial:
+
+    import kivy
+    import webbrowser
+    from functools import partial
+    ...
+
+    class LoopButton(BoxLayout):
+        def aff(self):
+            for w in word_list:
+                url = 'https://fr.wiktionary.org/wiki/' + w
+                button = Button(text= w, on_press=partial(webbrowser.open, url))
+                ...
+
+    Use lambda:
+
+    button = Button(text= w, on_press= lambda *args, url=url: webbrowser.open(url))
+
+    Create a callback:
+
+    class LoopButton(BoxLayout):
+        def aff(self):
+            for w in word_list:
+                button = Button(text= w, on_press=self.callback)
+                self.ids.grid.add_widget(button)
+
+        def callback(self, instance):
+            url = 'https://fr.wiktionary.org/wiki/' + instance.text
+            webbrowser.open(url)
+
+Share
+Edit
+Follow
+
+
+
+/////////////
+
+adb shell am broadcast -a action com.test.app.ACTION --es foo "bar"
+
+-n com.test.app/.SomeReceiver
+
+
+//////////////////////////////////
+
+# line = line+f'\n new-instance v2, {className}${methodName}$2; \n' \
+                                                       #             'invoke-direct {v2}'+f', {className}${methodName}$2;-><init>()V \n' \
+                                                         #                                  'invoke-virtual {v2}, Ljava/lang/Object;->getClass()Ljava/lang/Class; \n' \
+                                                         #                                  'move-result-object v2 \n' \
+                                                         #                                  'invoke-virtual {v2}, Ljava/lang/Class;->getEnclosingMethod()Ljava/lang/reflect/Method; \n' \
+                                                         #                                  'move-result-object v2 \n' \
+                                                         #                                  'const-string v3, "object{}.javaClass.enclosingMethod" \n' \
+                                                         #             'invoke-static {v2, v3}, Lkotlin/jvm/internal/Intrinsics;->checkNotNullExpressionValue(Ljava/lang/Object;Ljava/lang/String;)V \n' \
+                                                         #             'invoke-virtual {v2}, Ljava/lang/reflect/Method;->getName()Ljava/lang/String;\n' \
+                                                         #             'move-result-object v2 \n' \
+                                                         #             'const-string v3, "patchTag" \n' \
+                                                         #             'invoke-static {v3, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I \n'
+
+
+
+in java fun that just return the arg the locals 0
+
+in java fun that just add two args the locals 1 
+
+
+in Kotlin fun that just return the arg the locals 1
+
+in Kotlin fun that just add two args the locals 1 
+
 
