@@ -6,7 +6,7 @@ import re
 from src.model.Activity import Activity
 from src.model.Receiver import Receiver
 
-project = "src/deb_tool"
+project = "src/funs"
 
 def parseManifest():
 
