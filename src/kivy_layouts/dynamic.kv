@@ -1,6 +1,7 @@
 #:import utils kivy.utils
 
 <Dynamic>
+    apk_path_anyl_et:apk_path_anyl_et
 
 
     FloatLayout:
@@ -21,6 +22,17 @@
             text: "Dynamic Analysis"
             size_hint: None, None # <---
             pos_hint: {"x":0.5, "top":1.05}
+        Button
+            text: "Select Apk"
+            pos_hint:{"center_x": .3,"y":.82}
+            size:root.width*0.12,root.height*0.08
+            id: uploadApkAnylBtn
+            size_hint: None, None # <---
+        TextInput:
+            id: apk_path_anyl_et
+            size:self.parent.width*0.4,self.parent.height*0.08
+            size_hint: None, None # <---
+            pos_hint: {"x":0.38, "y":.82 }
         FloatLayout:
 
             canvas.before:
@@ -33,8 +45,8 @@
                     pos: self.pos
                     radius: [45]
 
-            size:self.parent.width*0.7,self.parent.height*0.88
-            pos_hint: {"x":0.20, "top":0.9}
+            size:self.parent.width*0.7,self.parent.height*0.75
+            pos_hint: {"x":0.20, "top":0.8}
             pos: self.pos
             size_hint: None, None # <---
 
@@ -52,11 +64,15 @@
                         size: separator.width, 2
             Label:
                 text: "Launchable Activities"
+                bold: True
+                font_size: '18dp'
                 background_color:(0, 2, 5, 1)
                 size_hint: None, None # <---
-                color:(0, 0, 5, 1)
+                color:(0, 0, 0, 1)
                 pos_hint: {"center_x": .5,"center_y":.92}
                 background_color:1,50,0,1
+
+
 
             GridLayout:
                 id:activitiesLayout
@@ -86,7 +102,9 @@
                         size: separator.width, 2
             Label:
                 text: "Receivers"
-                color:(0, 0, 5, 1)
+                bold: True
+                font_size: '18dp'
+                color:(0, 0, 0, 1)
                 id:receiverLabel
                 background_color:(0, 2, 5, 1)
                 size_hint: None, None # <---
@@ -104,13 +122,36 @@
 
                 GridLayout:
                     id:receiversLayout
-                    spacing:35
+                    spacing:30
                     border: (10,10,10,10)
 
                     cols:3
                     size_hint: None, None # <---
                     size:root.width*0.55,self.parent.height*0.2
                     pos_hint: {"center_x": .5,"center_y":.35}
+            Label:
+                text: ""
+                color:(0, 0, 0, 1)
+                id:anal_progress_label
+                size_hint: None, None # <---
+                pos_hint: {"x":0.40, "center_y":0.30}
+
+            ProgressBar:
+                id: analysis_progress_bar
+                #value: .25
+                min: 0
+                max: 100
+                pos_hint:{"center_x": .5,"center_y":.25}
+                size_hint_x: .4
+                opacity:0
+
+            Button
+                text: "Analysis"
+                pos_hint:{"center_x": .5,"y":.12}
+                size:root.width*0.12,root.height*0.08
+                id: analBtn
+                size_hint: None, None # <---
+
 
 
 

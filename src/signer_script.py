@@ -1,17 +1,43 @@
-
+import time
 import zipfile
 import shutil
 import subprocess
 import tempfile
 import os
 import pathlib
+from os.path import exists
 from pathlib import Path
+
+
+
+def testSignApk(apk):
+    cName = "Afif"
+    orgUnit = "learning"
+    org = "UQU"
+    location = "makkah"
+    state = "makkah"
+    country = "sa"
+    keyPass = "wr4k_fmwlgdf"
+    storePass = "xd8j42k_gskl"
+    script = os.path.dirname(__file__)
+    homeDir = Path(script).parent.absolute()
+    keyPath = Path(homeDir/"workDir/certs/test_cert.jks")
+
+    alias = "alias1"
+    print("apk signer")
+    print(os.getcwd())
+    apk_sign_comm = f"C:\\Users\\Afif\\python_projects\\afif_android_tool\\src\\apksigner.bat sign --v2-signing-enabled --ks {keyPath} --ks-key-alias {alias} --ks-pass pass:{storePass} --key-pass pass:{keyPass} {apk}"
+
+    p = subprocess.run(apk_sign_comm, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False)
+    if p.returncode > 0:
+        print(p.stdout.decode("utf8"))
+
 def signApk(apk,keyPath,storePass,keyPass,alias):
 
     if 1>0:
         print("apk signer")
         print(os.getcwd())
-        apk_sign_comm = f"C:\\Users\\Afif\\python_projects\\afif_android_tool\\src\\apksigner.bat sign --v2-signing-enabled --ks {keyPath} --ks-key-alias {alias} --ks-pass pass:{storePass} {apk}"
+        apk_sign_comm = f"C:\\Users\\Afif\\python_projects\\afif_android_tool\\src\\apksigner.bat sign --v2-signing-enabled --ks {keyPath} --ks-key-alias {alias} --ks-pass pass:{storePass} --key-pass pass:{keyPass} {apk}"
 
         p = subprocess.run(apk_sign_comm, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False)
         if p.returncode > 0:
@@ -46,57 +72,112 @@ def generateCert(outKeyFile,CName,orgUint,org,loc,state,country,keyPass,storePas
 
 ADB = shutil.which("adb")
 
-def unzipApk(apk):
+def decompileApk(apk,isPatch):
 
     workingdir = tempfile.mkdtemp(suffix='apkWorkingDir')
     # Unzip
-    print(" Unzip the apk file in workingdir ")
-    zip_ref = zipfile.ZipFile(apk, 'r')
-    cwd = os.getcwd()
+    #zip_ref = zipfile.ZipFile(apk, 'r')
+
     apkPath = Path(apk)
-    appFolder = apkPath.stem
-    # appFolder = f'{cwd}\{apk.name}'
+    print(f"apk path {apkPath}")
+    decomipleCommand = ""
+    if isPatch:
+        decomipleCommand = f'apktool d {apkPath} -o {getApkDestinationFolder(apk)}'
+    else:
+        decomipleCommand = f'apktool d {apkPath} -f -o {getApkAnylDestinationFolder(apk)}'
+    # subprocess.run(decomipleCommand, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False
+    process = subprocess.Popen(decomipleCommand, shell=True, stdout=subprocess.PIPE)
+    print(f"after decompile ")
 
-    zip_ref.extractall(f'{cwd}\{appFolder}')
-    # zip_ref.close()
 
 
+    if process.returncode != 0:
+        print(f"returncode != 0 ")
 
-    return appFolder
+    #zip_ref.extractall(distDir)
+
+    #zip_ref.close()
+
+
 
     #zipApk(workingdir)
 
     # Remove old signature
     #shutil.rmtree(os.path.join(workingdir, "META-INF"))
 
-def zipApk(appFolder):
+
+def getApkDestinationFolder(apk):
+    apkPath = Path(apk)
+    print(f"apk path {apkPath}")
+
+    appFolder = apkPath.stem
+
+    script = os.path.dirname(__file__)
+    homeDir = Path(script).parent.absolute()
+    workDir = Path(homeDir / "workDir")
+    destDir = Path(workDir / appFolder)
+
+    return destDir
+def getApkAnylDestinationFolder(apk):
+    apkPath = Path(apk)
+    print(f"apk path {apkPath}")
+
+    appFolder = apkPath.stem
+
+    script = os.path.dirname(__file__)
+    homeDir = Path(script).parent.absolute()
+    workDir = Path(homeDir / "workDir/analysis")
+    destDir = Path(workDir / appFolder)
+
+    return destDir
+
+
+
+def buildApk(appFolder):
 
     # Zip
-    print("start APK Building")
-    shutil.make_archive("new", 'zip', appFolder)
-    shutil.move("new.zip", "nat_zipped.apk")
+    # print("start APK Building")
+    # shutil.make_archive("new", 'zip', appFolder)
+    # shutil.move("new.zip", "nat_zipped.apk")
+
+    buildCommand = f'apktool b {appFolder}'
+
+    process = subprocess.Popen(buildCommand, shell=True, stdout=subprocess.PIPE)
 
 
 
-outKeyFile = "afif.jks"
-cName ="Afif"
-orgUnit = "learning"
-org = "UQU"
-location = "makkah"
-state = "makkah"
-country = "sa"
-newKeyPass = "wr4k_fmwlgdf"
-newStorePass = "xd8j42k_gskl"
+def zipAlignApk(selectedApk):
 
-newAlias = "alias"
+    projectPath = getApkDestinationFolder(selectedApk)
+    apkName = Path(selectedApk).name
+    distFolder = Path(projectPath/"dist")
+    srcApkPath = Path(distFolder/apkName)
+
+    alignedApkPath = Path(distFolder/"aligned.apk")
+    print(f"to be aligned Apk: {srcApkPath}")
+
+    zipAlignCommand = 'zipalign -p -f -v 4 '
+    argApk = f'{srcApkPath} {alignedApkPath}'
+
+    for i in range(4):
+        print(f'i = {i}')
+        if exists(srcApkPath) and i == 3:
+            process = os.system( zipAlignCommand + argApk )
+            break
+        time.sleep(1)
+
+
+
+
+
+
+
+
+
 #generateCert(outKeyFile,cName,orgUnit,org,location,state,country,newKeyPass,newStorePass,newAlias)
 
 #print(" Signing the APK")
-storePass = "lkglgefsfkd_"
-keyPass = "gszlgsdglffl"
-keyStore = "store.jks"
-alias = "key0"
-apk= "nat_rel.apk"
+
 #unzipApk(apk)
 #signApk(apk,outKeyFile,newStorePass,newKeyPass,newAlias)
 
