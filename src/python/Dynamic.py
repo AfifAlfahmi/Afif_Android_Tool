@@ -1,3 +1,4 @@
+from kivy.clock import Clock
 from kivy.graphics import Color, Rectangle
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
@@ -6,44 +7,58 @@ from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 
 from src.custom.FormattedLabel import FormattedLabel
-from src.manifest_parser import parseManifest, getActivities, getReceivers
+from src.manifest_parser import getPackageName, getActivities, getReceivers, openManifest
 import os
 import subprocess
 from kivy.properties import ListProperty, NumericProperty
+
+from src.signer_script import getApkDestinationFolder, getApkAnylDestinationFolder, decompileApk
+
 Builder.load_file("../kivy_layouts/dynamic.kv")
 
 class Dynamic(Widget):
+    apk_path_anyl_et = ObjectProperty(None)
+    apkFilePath = ""
+    isDecompiled = False
+    interval = None
+
+
     def __init__(self, **kwargs):
         super(Dynamic, self).__init__(**kwargs)
 
         self.activitiesLayout = self.ids.activitiesLayout
         self.receiversLayout = self.ids.receiversLayout
         self.receiverLabel = self.ids.receiverLabel
+        self.analBtn = self.ids.analBtn
+        self.analysis_progress_bar = self.ids.analysis_progress_bar
+        self.anal_progress_label = self.ids.anal_progress_label
 
-        self.nameLabel = "Name"
-        self.actionLabel = "Action"
-        self.pencolor = ListProperty([1, 0, 0, 1])  # Red
+
+
+
 
         self.background_color = ListProperty()
-        self.actNameLbl = Label(text=str("Name"), size_hint_y=None, size=(60, 15), color=(0, 0, 5, 1))
+
+
+        self.analBtn.bind(on_press=lambda m: self.operationsSchedule())
+
+    def analysisApk(self):
+
+
+        print('operation schedule finish')
+        self.actNameLbl = Label(text=str("Name"), size_hint_y=None, size=(60, 15), color=(0, 0, 0, 1))
         self.actActionLbl = Label(text=str(""), size_hint_y=None, size=(60, 15), color=(0, 0, 5, 1))
         self.actEmpty = Label(text=str(""), size_hint=(None, None), size=(60, 10))
         self.actEmpty.canvas.before.add(Color(self.background_color))
 
-
-
         self.activitiesLayout.add_widget(self.actNameLbl)
         self.activitiesLayout.add_widget(self.actActionLbl)
         self.activitiesLayout.add_widget(self.actEmpty)
+        projectPath = getApkAnylDestinationFolder(self.apkFilePath)
 
-
-
-
-
-        parseManifest()
-        activities =  getActivities()
-        receivers = getReceivers()
-        packName = parseManifest()
+        activities =  getActivities(self,openManifest(self,projectPath))
+        receivers = getReceivers(self,openManifest(self,projectPath))
+        packName = getPackageName(self,openManifest(self,projectPath))
         for i in activities:
 
             self.actBtn = Button(text=str("Start"), size_hint=(None,None), size=(60, 30),
@@ -70,8 +85,8 @@ class Dynamic(Widget):
 
         # self.actionLbl.canvas.before.add(Rectangle(size=(50, 50))    )
         # self.actionLbl.canvas.before.add(Color(1., 2., 0)  )
-        self.recNameLbl = Label(text=str("Name"), size_hint_y=None, size=(60, 15), color=(0, 0, 5, 1))
-        self.recActionLbl = Label(text=str("Action"), size_hint_y=None, size=(60, 15), color=(0, 0, 5, 1))
+        self.recNameLbl = Label(text=str("Name"), size_hint_y=None, size=(60, 15), color=(0, 0, 0, 1))
+        self.recActionLbl = Label(text=str("Action"), size_hint_y=None, size=(60, 15), color=(0, 0, 0, 1))
         self.recEmpty = Label(text=str(""), size_hint=(None, None), size=(60, 10))
 
 
@@ -94,6 +109,35 @@ class Dynamic(Widget):
             #self.actBtn
 
             print(f"ret pack name: {packName}")
+    def operationsSchedule(self):
+
+        self.analysis_progress_bar.value = 0
+        self.analysis_progress_bar.opacity = 1
+        # self.add_widget(self.pb)
+        apkPath = self.apk_path_anyl_et.text
+        decompileApk(apkPath, False)
+
+        self.anal_progress_label.text = "decompiling..."
+        self.interval = Clock.schedule_interval(self.next, 1)
+
+    def next(self, dt):
+        value = self.analysis_progress_bar.value
+        if value < 100:
+
+            self.analysis_progress_bar.value += 5
+        if value == 100:
+            self.isDecompiled = True
+            self.analysis_progress_bar.value = 0
+            self.anal_progress_label.text = "analysis..."
+
+        if value == 30 and self.isDecompiled:
+
+            self.analysisApk()
+            self.interval.cancel()
+            self.analysis_progress_bar.opacity = 0
+            self.anal_progress_label.text = ""
+
+
 
     def startActivity(self,packName,actName):
         print(f"pack name in start: {packName}")

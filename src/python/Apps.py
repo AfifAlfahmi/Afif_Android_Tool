@@ -24,8 +24,8 @@ class Apps(Widget):
             print("found devices")
             device = devices[0]
             for i in getPackages(device):
-                self.btn = Button(text=str(i), size_hint_y=None, size=(100, 80), )
-                self.btnClone = Button(text=str("clone"), size_hint=(None, None), size=(40, 80),
+                self.btn = Button(text=str(i), size_hint_y=None, size=(150, 50), )
+                self.btnClone = Button(text=str("clone"), size_hint=(None, None), size=(80, 50),
                                        on_press=lambda *args, i=i: self.cloneApp(i.decode())
                                        )
                 self.appsGradeLayout.add_widget(self.btn)

@@ -15,7 +15,7 @@
         canvas.before:
             Color:
                 #rgba: 1, 0.3, 0.2, 1
-                rgb: utils.get_color_from_hex('#80ff00')
+                rgb: utils.get_color_from_hex('#000000')
             Rectangle:
                 pos: self.pos
                 size: self.size
@@ -30,12 +30,12 @@
             do_scroll_y: True
             id:sclContainer
             size_hint: None, None # <---
-            size:root.width*0.5,root.height*0.7
-            pos_hint: {"x":0.30, "top":0.80}
+            size:root.width*0.65,root.height*0.7
+            pos_hint: {"x":0.23, "top":0.80}
             GridLayout:
                 id:appsGradeLayout
                 cols:2
                 spacing:10
                 size_hint: None, None # <---
-                size:root.width*0.5,self.parent.height*0.2
+                size:root.width*0.65,self.parent.height*0.2
                 minimum_height:self.height

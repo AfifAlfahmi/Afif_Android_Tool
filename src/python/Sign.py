@@ -3,6 +3,7 @@ from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.uix.widget import Widget
 
+from src.python import Apk
 from src.signer_script import signApk, testSignApk
 
 Builder.load_file("../kivy_layouts/sign_layout.kv")
@@ -13,6 +14,7 @@ class Sign(Widget):
     signStorePass: ObjectProperty(None)
     signAlias: ObjectProperty(None)
     signKeyPass: ObjectProperty(None)
+    apkFilePath = ""
     isProdSign = True
     isTestSign = False
     def __init__(self, **kwargs):
@@ -39,7 +41,6 @@ class Sign(Widget):
 
     def signApkValidation(self):
         print("start apk signing")
-        apkPath = self.apk_path_et.text
         keyPath = self.keyPathET.text
         storePass = self.signStorePass.text
 
@@ -50,17 +51,17 @@ class Sign(Widget):
         if self.isProdSign:
             print(f'prod sign selected')
 
-            if (not apkPath or not keyPath or not storePass or not keyPass or not alias):
-                print(f'empty apk path {apkPath}')
+            if (not self.apkFilePath or not keyPath or not storePass or not keyPass or not alias):
+                print(f'empty apk path {self.apkFilePath}')
             else:
-                print(f'not empty apk path {apkPath}')
-                # unzipApk(apkPath)
-                signApk(apkPath, keyPath, storePass, keyPass, alias)
+                print(f'not empty apk path {self.apkFilePath}')
+                # unzipApk(self.apkFilePath)
+                signApk(self.apkFilePath, keyPath, storePass, keyPass, alias)
 
         else:
             print(f'test sign selected')
-            #unzipApk(apkPath)
-            testSignApk(apkPath)
+            #unzipApk(self.apkFilePath)
+            testSignApk(self.apkFilePath)
 
     def on_checkbox_Active(self,checkboxInstance, isActive):
 
