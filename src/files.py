@@ -1,9 +1,8 @@
 import shutil
 import subprocess
 import os
-
-
-
+import time
+from os.path import exists
 ADB = shutil.which("adb")
 
 out = os.popen('adb shell "dumpsys activity | grep "MainActivity""').read() #os.popen support for read operations
@@ -26,9 +25,20 @@ def getApk(packageName):
   pathRes = pathRes.strip()
   pullComm = f'adb pull {formattedPath} {workDir}'
   print(f"pull command: {pullComm}")
+  print(f"package name: {packageName}")
+
 
   subprocess.Popen(pullComm, shell=True, stdout=subprocess.PIPE).wait()
-  os.rename(f'{workDir}\\base.apk', f'{workDir}\\{packageName}.apk')
+
+  for i in range(4):
+    print(f'i = {i}')
+    if exists(f'{workDir}\\base.apk'):
+      os.rename(f'{workDir}\\base.apk', f'{workDir}\\{packageName}.apk')
+    time.sleep(1)
+
+
+
+
   #print(f'result of str {resultStr}')
   #print(f'path of result: {pathRes}')
   #print(f'type of str {type(resultStr)}')

@@ -15,7 +15,7 @@
         canvas.before:
             Color:
                 #rgba: 1, 0.3, 0.2, 1
-                rgb: utils.get_color_from_hex('#80ff00')
+                rgb: utils.get_color_from_hex('#000000')
             Rectangle:
                 pos: self.pos
                 size: self.size
@@ -30,7 +30,7 @@
             canvas.before:
                 Color:
                     #rgba: 1, 0.3, 0.2, 1
-                    rgb: utils.get_color_from_hex('#0080ff')
+                    rgb: utils.get_color_from_hex('#000000')
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -50,14 +50,14 @@
                 values: '/data/local/tmp', '/data/bin', '/sdcard/Download/','/system/bin'
                 size:root.width*0.24,root.height*0.1
                 size_hint: None, None # <---
-                pos_hint:{"center_x": .40,"y":.75}
+                pos_hint:{"center_x": .45,"y":.75}
                 text:"destination"
                 on_text: root.spinner_clicked(spinner.text)
 
 
             Button
                 text: "Push"
-                pos_hint:{"center_x": .7,"y":.75}
+                pos_hint:{"center_x": .73,"y":.75}
                 size:root.width*0.12,root.height*0.1
                 id: pushFileBtn
                 size_hint: None, None # <---

@@ -1,10 +1,11 @@
-
+import time
 import zipfile
 import shutil
 import subprocess
 import tempfile
 import os
 import pathlib
+from os.path import exists
 from pathlib import Path
 
 
@@ -71,44 +72,104 @@ def generateCert(outKeyFile,CName,orgUint,org,loc,state,country,keyPass,storePas
 
 ADB = shutil.which("adb")
 
-def unzipApk(apk):
+def decompileApk(apk,isPatch):
 
     workingdir = tempfile.mkdtemp(suffix='apkWorkingDir')
     # Unzip
-    print(" Unzip the apk file in workingdir ")
-    zip_ref = zipfile.ZipFile(apk, 'r')
-    cwd = os.getcwd()
+    #zip_ref = zipfile.ZipFile(apk, 'r')
+
     apkPath = Path(apk)
-    appFolder = apkPath.stem
-    # appFolder = f'{cwd}\{apk.name}'
-
-    print(f"app folder{appFolder}  ")
-    script = os.path.dirname(__file__)
-    homeDir = Path(script).parent.absolute()
-    workDir = Path(homeDir/"workDir")
-    distDir = Path(workDir/appFolder)
-
-
-    zip_ref.extractall(distDir)
-
-    print(f"dist folder path {script}")
-    # zip_ref.close()
+    print(f"apk path {apkPath}")
+    decomipleCommand = ""
+    if isPatch:
+        decomipleCommand = f'apktool d {apkPath} -o {getApkDestinationFolder(apk)}'
+    else:
+        decomipleCommand = f'apktool d {apkPath} -f -o {getApkAnylDestinationFolder(apk)}'
+    # subprocess.run(decomipleCommand, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False
+    process = subprocess.Popen(decomipleCommand, shell=True, stdout=subprocess.PIPE)
+    print(f"after decompile ")
 
 
 
-    return distDir
+    if process.returncode != 0:
+        print(f"returncode != 0 ")
+
+    #zip_ref.extractall(distDir)
+
+    #zip_ref.close()
+
+
 
     #zipApk(workingdir)
 
     # Remove old signature
     #shutil.rmtree(os.path.join(workingdir, "META-INF"))
 
-def zipApk(appFolder):
+
+def getApkDestinationFolder(apk):
+    apkPath = Path(apk)
+    print(f"apk path {apkPath}")
+
+    appFolder = apkPath.stem
+
+    script = os.path.dirname(__file__)
+    homeDir = Path(script).parent.absolute()
+    workDir = Path(homeDir / "workDir")
+    destDir = Path(workDir / appFolder)
+
+    return destDir
+def getApkAnylDestinationFolder(apk):
+    apkPath = Path(apk)
+    print(f"apk path {apkPath}")
+
+    appFolder = apkPath.stem
+
+    script = os.path.dirname(__file__)
+    homeDir = Path(script).parent.absolute()
+    workDir = Path(homeDir / "workDir/analysis")
+    destDir = Path(workDir / appFolder)
+
+    return destDir
+
+
+
+def buildApk(appFolder):
 
     # Zip
-    print("start APK Building")
-    shutil.make_archive("new", 'zip', appFolder)
-    shutil.move("new.zip", "nat_zipped.apk")
+    # print("start APK Building")
+    # shutil.make_archive("new", 'zip', appFolder)
+    # shutil.move("new.zip", "nat_zipped.apk")
+
+    buildCommand = f'apktool b {appFolder}'
+
+    process = subprocess.Popen(buildCommand, shell=True, stdout=subprocess.PIPE)
+
+
+
+def zipAlignApk(selectedApk):
+
+    projectPath = getApkDestinationFolder(selectedApk)
+    apkName = Path(selectedApk).name
+    distFolder = Path(projectPath/"dist")
+    srcApkPath = Path(distFolder/apkName)
+
+    alignedApkPath = Path(distFolder/"aligned.apk")
+    print(f"to be aligned Apk: {srcApkPath}")
+
+    zipAlignCommand = 'zipalign -p -f -v 4 '
+    argApk = f'{srcApkPath} {alignedApkPath}'
+
+    for i in range(4):
+        print(f'i = {i}')
+        if exists(srcApkPath) and i == 3:
+            process = os.system( zipAlignCommand + argApk )
+            break
+        time.sleep(1)
+
+
+
+
+
 
 
 
