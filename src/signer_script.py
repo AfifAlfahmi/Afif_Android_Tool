@@ -11,6 +11,7 @@ from pathlib import Path
 
 
 def testSignApk(apk):
+    result = ""
     cName = "Afif"
     orgUnit = "learning"
     org = "UQU"
@@ -30,10 +31,27 @@ def testSignApk(apk):
 
     p = subprocess.run(apk_sign_comm, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False)
     if p.returncode > 0:
-        print(p.stdout.decode("utf8"))
+        stdOut = p.stdout.decode("utf8")
+        print(stdOut)
+
+        if stdOut.__contains__('Password verification failed'):
+            result = 'Password verification failed'
+
+        if stdOut.__contains__('system cannot find the file specified'):
+            result = 'the system cannot find the file specified'
+
+        else:
+            result = "error, Verify the parameters values "
+
+    else:
+        print(f'sign status not > 0: {p.stdout.decode("utf8")}')
+        result = "Apk signed successfully"
+
+
+    return result
 
 def signApk(apk,keyPath,storePass,keyPass,alias):
-
+    result = ""
     if 1>0:
         print("apk signer")
         print(os.getcwd())
@@ -41,7 +59,23 @@ def signApk(apk,keyPath,storePass,keyPass,alias):
 
         p = subprocess.run(apk_sign_comm, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False)
         if p.returncode > 0:
-            print(p.stdout.decode("utf8"))
+            stdOut = p.stdout.decode("utf8")
+            print(stdOut)
+
+            if stdOut.__contains__('Password verification failed'):
+                result = 'Password verification failed'
+
+            if stdOut.__contains__('system cannot find the file specified'):
+                result = 'the system cannot find the file specified'
+
+            else:
+                result = "error, Verify the parameters values "
+
+
+
+        else:
+            result = "Apk signed successfully"
+
 
 
     else:
@@ -58,17 +92,28 @@ def signApk(apk,keyPath,storePass,keyPass,alias):
             print(p.stdout.decode("utf8"))
            # print(p.stderr.decode("utf8"))
 
-
+    return  result
 
 
 # create cert
 def generateCert(outKeyFile,CName,orgUint,org,loc,state,country,keyPass,storePass,alias):
+    result = ""
     print(f"out from signer {CName}")
 
 
-    keytool = f'keytool -genkey -v -keystore {outKeyFile} -dname "CN={CName}, OU={orgUint}, O={org}, L={loc}, S={state}, C={country}" -keypass {keyPass} -storepass {storePass} -alias {alias} -keyalg RSA -keysize 2048 -validity 10000'
-    os.system(keytool)
+    keytoolCommand = f'keytool -genkey -v -keystore {outKeyFile} -dname "CN={CName}, OU={orgUint}, O={org}, L={loc}, S={state}, C={country}" -keypass {keyPass} -storepass {storePass} -alias {alias} -keyalg RSA -keysize 2048 -validity 10000'
 
+    #p = os.system(keytoolCommand)
+    p = subprocess.run(keytoolCommand, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False)
+
+    if p.returncode > 0:
+        stdOut = p.stdout.decode("utf8")
+        print(stdOut)
+        result = stdOut
+    else:
+        result = "cert created successfully"
+
+    return result
 
 ADB = shutil.which("adb")
 

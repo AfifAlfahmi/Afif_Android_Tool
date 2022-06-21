@@ -37,6 +37,7 @@ class Apk(Widget):
 
 
     selectedApk = ""
+    selectedCert = ""
 
     def __init__(self, **kwargs):
         super(Apk, self).__init__(**kwargs)
@@ -110,20 +111,23 @@ class Apk(Widget):
     def fileSelected(self, selection):
 
         # print(selection)
+        self.signLayout.sign_res_status.text = ""
         if selection:
             if selection[0].endswith(".apk"):
                 print("ext APK")
                 self.selectedApk = selection[0]
 
-            elif  selection[0].endswith(".jks") or selection[0].endswith(".KEYSTORE"):
-                self.signLayout.keyPathET.text = selection[0]
+            elif  selection[0].endswith(".jks") or selection[0].endswith(".KEYSTORE") or selection[0].endswith(".keystore"):
+                self.selectedCert = Path(selection[0])
+                self.signLayout.keyPathET.text = self.selectedCert.name
                 #self.signApkValidation()
             else:
-                print(selection[0])
-                self.decompileApkBtn.opacity = 0
-                self.log_funs_label.opacity = 1
-                self.log_funs_check_box.opacity = 1
-                self.debugApkBtn.opacity = 1
+                print(f'file extension not supported  {selection[0]}')
+                # self.decompileApkBtn.opacity = 0
+                # self.log_funs_label.opacity = 1
+                # self.log_funs_check_box.opacity = 1
+                # self.debugApkBtn.opacity = 1
+
     def on_checkbox_active(self,checkbox, value):
         if value == True:
             print(f'check box checked {checkbox.text}')
@@ -241,6 +245,9 @@ class Apk(Widget):
             self.certLayOutDidplayed = False
             self.dynamicLayoutDisplayed = False
             self.signLayoutDisplayed = True
+            self.signBtn.background_color = 1, 1, 1, 1
+            self.patchBtn.background_color = 0.67, 0.67, 0.67, 1
+            self.dynamicBtn.background_color = 0.67, 0.67, 0.67, 1
 
 
         self.apkLayout.remove_widget(self.sidebar)
@@ -254,6 +261,10 @@ class Apk(Widget):
             self.apkLayout.remove_widget(self.certLayout)
             self.apkLayout.remove_widget(self.patchLayout)
             self.apkLayout.remove_widget(self.dynamic)
+            self.patchBtn.background_color = 1, 1, 1, 1
+            self.signBtn.background_color = 0.67, 0.67, 0.67, 1
+            self.dynamicBtn.background_color = 0.67, 0.67, 0.67, 1
+
 
 
             self.apkLayout.add_widget(self.patchLayout)
@@ -281,5 +292,8 @@ class Apk(Widget):
             self.signLayoutDisplayed = False
             self.certLayOutDidplayed = False
             self.dynamicLayoutDisplayed = True
+            self.dynamicBtn.background_color = 1, 1, 1, 1
+            self.signBtn.background_color = 0.67, 0.67, 0.67, 1
+            self.patchBtn.background_color = 0.67, 0.67, 0.67, 1
         self.apkLayout.remove_widget(self.sidebar)
         self.apkLayout.add_widget(self.sidebar)

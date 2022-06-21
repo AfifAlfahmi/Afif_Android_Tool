@@ -53,11 +53,17 @@ class HomeScreen(Screen):
 
         self.add_widget(self.device)
         self.isDeviceLayoutDispalyed = True
+        self.toDeviceBtn.background_color = 1, 1, 1, 1
+        self.toApkBtn.background_color = 0.67, 0.67, 0.67, 1
+        #self.toDeviceBtn.background_color = 0.89, 0.89, 0.89, 1
+        #self.toDeviceBtn.background_color = 0.96, 0.99, 0.99, 1
         # self.nav.ids.nav_label.text = "Alfahmi"
         # self.parent.ids.
 
     def toApk(self):
         if self.isDeviceLayoutDispalyed:
+            self.toApkBtn.background_color = 1, 1, 1, 1
+            self.toDeviceBtn.background_color = 0.67, 0.67, 0.67, 1
             self.remove_widget(self.device)
             self.remove_widget(self.apk)
             self.add_widget(self.apk)

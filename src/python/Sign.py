@@ -17,24 +17,21 @@ class Sign(Widget):
     apkFilePath = ""
     isProdSign = True
     isTestSign = False
+    signResult = ""
+
     def __init__(self, **kwargs):
         super(Sign, self).__init__(**kwargs)
         self.signApkBtn = self.ids.signApkBtn
+        self.newCertBtn = self.ids.newCertBtn
         self.testSignChBox = self.ids.testSignChBox
         self.prodSignChBox = self.ids.prodSignChBox
         self.prodSignLayout = self.ids.prodSignLayout
-
-
-
-
-
-
+        self.sign_res_status = self.ids.sign_res_status
 
         self.signApkBtn.bind(on_press= lambda h:self.signApkValidation())
 
         self.testSignChBox.bind(active=self.on_checkbox_Active)
         self.prodSignChBox.bind(active=self.on_checkbox_Active)
-
 
 
 
@@ -53,15 +50,20 @@ class Sign(Widget):
 
             if (not self.apkFilePath or not keyPath or not storePass or not keyPass or not alias):
                 print(f'empty apk path {self.apkFilePath}')
+                self.signResult = "all the fields required"
+                self.sign_res_status.text = self.signResult
+
             else:
-                print(f'not empty apk path {self.apkFilePath}')
-                # unzipApk(self.apkFilePath)
-                signApk(self.apkFilePath, keyPath, storePass, keyPass, alias)
+                self.signResult = signApk(self.apkFilePath, keyPath, storePass, keyPass, alias)
+                self.sign_res_status.text = self.signResult
 
         else:
-            print(f'test sign selected')
-            #unzipApk(self.apkFilePath)
-            testSignApk(self.apkFilePath)
+            if not self.apkFilePath:
+                self.sign_res_status.text = "empty apk path"
+            else:
+                print(f'test sign selected')
+                self.signResult = testSignApk(self.apkFilePath)
+                self.sign_res_status.text = self.signResult
 
     def on_checkbox_Active(self,checkboxInstance, isActive):
 
@@ -82,14 +84,18 @@ class Sign(Widget):
 
     def prodSign(self):
         self.prodSignLayout.opacity = 1
-        self.signApkBtn.pos_hint = {'center_x': .5, 'center_y': .1}
+        self.signApkBtn.pos_hint = {'center_x': .385, 'center_y': .15}
+        self.newCertBtn.pos_hint = {'center_x': .385, 'center_y': .09}
         self.isProdSign = True
         self.isTestSign = False
+        self.sign_res_status.text = ""
 
     def testSign(self):
         self.prodSignLayout.opacity = 0
-        self.signApkBtn.pos_hint = {'center_x': .5, 'center_y': .5}
+        self.signApkBtn.pos_hint = {'center_x': .385, 'center_y': .5}
+        self.newCertBtn.pos_hint = {'center_x': .385, 'center_y': .44}
         self.isTestSign = True
         self.isProdSign = False
+        self.sign_res_status.text = ""
 
     pass

@@ -21,6 +21,7 @@
                 size: self.size
         Label:
             text: "Apps List"
+            font_size: '18dp'
             size_hint: None, None # <---
             pos_hint: {"x":0.5, "top":1.05}
 
@@ -30,12 +31,19 @@
             do_scroll_y: True
             id:sclContainer
             size_hint: None, None # <---
-            size:root.width*0.65,root.height*0.7
-            pos_hint: {"x":0.23, "top":0.80}
+            size:root.width*0.55,root.height*0.7
+            pos_hint: {"x":0.27, "top":0.87}
             GridLayout:
                 id:appsGradeLayout
                 cols:2
                 spacing:10
                 size_hint: None, None # <---
-                size:root.width*0.65,self.parent.height*0.2
+                size:root.width*0.55,self.parent.height*0.2
                 minimum_height:self.height
+        Label:
+            text: ""
+            id:extracting_label
+            font_size: '18dp'
+            opacity:1
+            size_hint: None, None # <---
+            pos_hint:{"center_x": .535,"center_y":.12}
