@@ -69,6 +69,8 @@ class Device(Widget):
            self.deviceLayout.add_widget(self.apps)
            self.appsLayoutDidplayed = True
            self.fileLayoutDidplayed = False
+           self.appsBtn.background_color = 1, 1, 1, 1
+           self.filesBtn.background_color = 0.67, 0.67, 0.67, 1
 
         self.deviceLayout.remove_widget(self.sidebar)
         self.deviceLayout.add_widget(self.sidebar)
@@ -82,6 +84,8 @@ class Device(Widget):
 
             self.fileLayoutDidplayed = True
             self.appsLayoutDidplayed = False
+            self.filesBtn.background_color = 1, 1, 1, 1
+            self.appsBtn.background_color = 0.67, 0.67, 0.67, 1
 
         self.deviceLayout.remove_widget(self.sidebar)
         self.deviceLayout.add_widget(self.sidebar)

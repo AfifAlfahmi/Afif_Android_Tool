@@ -24,7 +24,8 @@
         Label:
             text: "Sign Apk"
             size_hint: None, None # <---
-            pos_hint: {"x":0.5, "top":1.05}
+            pos_hint: {"x":0.495, "top":1.05}
+            font_size: '18dp'
         FloatLayout:
 
             canvas.before:
@@ -40,49 +41,48 @@
             size_hint: None, None # <---
             Button
                 text: "Select Apk"
-                pos_hint:{"center_x": .17,"y":.75}
-                size:root.width*0.12,root.height*0.1
+                pos_hint:{"center_x": .24,"y":.86}
+                size:root.width*0.135,root.height*0.08
                 id: uploadApkBtn
                 size_hint: None, None # <---
             TextInput:
                 id: apk_path_et
-                size:self.parent.width*0.45,self.parent.height*0.08
+                size:self.parent.width*0.26,self.parent.height*0.08
                 size_hint: None, None # <---
-                pos_hint: {"x":0.30, "y":.78}
+                pos_hint: {"x":0.35, "y":.87}
             Label:
                 text: "Test Sign"
                 font_size:20
-                pos_hint:{"center_x": .2,"y":.60}
+                pos_hint:{"center_x": .24,"y":.68}
                 size_hint: None, None # <---
             Label:
                 text: "Prod Sign"
                 font_size:20
-                pos_hint:{"center_x": .5,"y":.60}
+                pos_hint:{"center_x": .45,"y":.68}
                 size_hint: None, None # <---
 
             CheckBox:
                 id: testSignChBox
                 group:"signType"
             #on_active: root.checkbox_click(self, self.active,"Pepperoni")
-                pos_hint:{"center_x": .35,"y":.60}
+                pos_hint:{"center_x": .32,"y":.67}
                 size_hint: None, None # <---
                 canvas.before:
                     Color:
-                        #rgba: 1, 0.3, 0.2, 1
-                        rgb: utils.get_color_from_hex('#ff0080')
+                        rgb: utils.get_color_from_hex('#e6e6ff')
                     Rectangle:
                         pos:self.center_x-7, self.center_y-7
                         size: 20,20
             CheckBox:
                 id: prodSignChBox
+                active: True
                 group:"signType"
                 #on_active: root.checkbox_click(self, self.active,"Pepperoni")
-                pos_hint:{"center_x": .65,"y":.60}
+                pos_hint:{"center_x": .54,"y":.67}
                 size_hint: None, None # <---
                 canvas.before:
                     Color:
-                        #rgba: 1, 0.3, 0.2, 1
-                        rgb: utils.get_color_from_hex('#ff0080')
+                        rgb: utils.get_color_from_hex('#e6e6ff')
                     Rectangle:
                         pos:self.center_x-7, self.center_y-7
                         size: 20,20
@@ -99,14 +99,14 @@
                         pos: self.pos
                         size: self.size
                 size:self.parent.width*0.65,self.parent.height*0.48
-                pos_hint: {"x":0.10, "top":0.66}
+                pos_hint: {"x":0.09, "top":0.71}
                 pos: self.pos
                 size_hint: None, None # <---
 
                 Button
                     text: "Select key store"
-                    pos_hint:{"center_x": .2,"y":.8}
-                    size:root.width*0.15,root.height*0.05
+                    pos_hint:{"center_x": .23,"y":.8}
+                    size:root.width*0.135,root.height*0.08
                     id: selCertBtn
                     size_hint: None, None # <---
 
@@ -115,8 +115,8 @@
                     id: keyPathET
                     font_size: 18
                     multiline: False
-                    pos_hint: {"x": 0.42, "y":0.8}
-                    size:self.parent.width*0.5,self.parent.height*0.15
+                    pos_hint: {"x": 0.40, "y":0.827}
+                    size:self.parent.width*0.39,self.parent.height*0.15
                     size_hint: None, None # <---
                     #size_hint: 0.04, 0.03
 
@@ -130,7 +130,7 @@
                     text:"store Pass: "
                     font_size: root.width*0.025
 
-                    pos_hint: {"x":0.13, "top":0.75}
+                    pos_hint: {"x":0.17, "top":0.75}
                     size: self.parent.width*0.15,self.parent.height*0.15
                     size_hint: None, None # <---
 
@@ -139,8 +139,9 @@
                     id: signStorePass
                     font_size: 18
                     multiline: False
-                    pos_hint: {"x": 0.42, "top":0.75}
-                    size:self.parent.width*0.5,self.parent.height*0.15
+                    password: True
+                    pos_hint: {"x": 0.40, "top":0.75}
+                    size:self.parent.width*0.39,self.parent.height*0.15
                     size_hint: None, None # <---
                     #size_hint: 0.04, 0.03
 
@@ -148,7 +149,7 @@
                     text:"Alias:"
                     font_size: root.width*0.025
 
-                    pos_hint: {"x":0.13, "top":0.55}
+                    pos_hint: {"x":0.17, "top":0.55}
                     size: self.parent.width*0.15,self.parent.height*0.15
                     size_hint: None, None # <---
 
@@ -157,15 +158,15 @@
                     id: signAlias
                     font_size: 18
                     multiline: False
-                    pos_hint: {"x": 0.42, "top":0.55}
-                    size:self.parent.width*0.5,self.parent.height*0.15
+                    pos_hint: {"x": 0.40, "top":0.55}
+                    size:self.parent.width*0.39,self.parent.height*0.15
                     size_hint: None, None # <---
                     #size_hint: 0.04, 0.03
                 Label:
                     text:"keyPass: "
                     font_size: root.width*0.025
 
-                    pos_hint: {"x":0.13, "top":0.35}
+                    pos_hint: {"x":0.17, "top":0.35}
                     size: self.parent.width*0.15,self.parent.height*0.15
                     size_hint: None, None # <---
 
@@ -175,19 +176,25 @@
                     font_size: 18
                     multiline: False
                     password: True
-                    pos_hint: {"x": 0.42, "top":0.35}
-                    size:self.parent.width*0.5,self.parent.height*0.15
+                    pos_hint: {"x": 0.40, "top":0.35}
+                    size:self.parent.width*0.39,self.parent.height*0.15
                     size_hint: None, None # <---
                     #size_hint: 0.04, 0.03
+            Label:
+                text:""
+                id:sign_res_status
+                pos_hint: {"x":0.31, "top":0.33}
+                size: self.parent.width*0.15,self.parent.height*0.15
+                size_hint: None, None # <---
             Button
                 text: "Sign"
-                pos_hint:{"center_x": .5,"center_y":.1}
+                pos_hint:{"center_x": .385,"center_y":.15}
                 size:root.width*0.15,root.height*0.05
                 id: signApkBtn
                 size_hint: None, None # <---
             Button
                 text: "New Cert"
-                pos_hint:{"center_x": .5,"center_y":.05}
+                pos_hint:{"center_x": .385,"center_y":.09}
                 size:root.width*0.15,root.height*0.05
                 id: newCertBtn
                 size_hint: None, None # <---

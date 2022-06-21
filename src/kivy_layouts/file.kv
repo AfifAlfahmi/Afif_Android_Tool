@@ -21,6 +21,7 @@
                 size: self.size
         Label:
             text: "Files"
+            font_size: '18dp'
             size_hint: None, None # <---
             pos_hint: {"x":0.5, "top":1.05}
         FloatLayout:
@@ -39,7 +40,7 @@
             pos: self.pos
             Button
                 text: "Select file"
-                pos_hint:{"center_x": .17,"y":.75}
+                pos_hint:{"center_x": .22,"y":.75}
                 size:root.width*0.12,root.height*0.1
                 id: selFileBtn
                 size_hint: None, None # <---
@@ -50,7 +51,7 @@
                 values: '/data/local/tmp', '/data/bin', '/sdcard/Download/','/system/bin'
                 size:root.width*0.24,root.height*0.1
                 size_hint: None, None # <---
-                pos_hint:{"center_x": .45,"y":.75}
+                pos_hint:{"center_x": .475,"y":.75}
                 text:"destination"
                 on_text: root.spinner_clicked(spinner.text)
 
@@ -61,4 +62,12 @@
                 size:root.width*0.12,root.height*0.1
                 id: pushFileBtn
                 size_hint: None, None # <---
+
+            Label:
+                text: ""
+                id:push_label
+                font_size: '18dp'
+                opacity:1
+                size_hint: None, None # <---
+                pos_hint:{"center_x": .47,"center_y":.45}
 

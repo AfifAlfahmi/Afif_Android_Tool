@@ -28,12 +28,16 @@ def getApk(packageName):
   print(f"package name: {packageName}")
 
 
+
   subprocess.Popen(pullComm, shell=True, stdout=subprocess.PIPE).wait()
 
   for i in range(4):
     print(f'i = {i}')
     if exists(f'{workDir}\\base.apk'):
+      print(f'Apk exists')
       os.rename(f'{workDir}\\base.apk', f'{workDir}\\{packageName}.apk')
+      break
+
     time.sleep(1)
 
 
