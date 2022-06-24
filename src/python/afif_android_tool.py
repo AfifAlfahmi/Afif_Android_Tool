@@ -17,7 +17,6 @@ from plyer import filechooser
 #     root.add_widget(slider)
 from src.python.Apk import Apk
 from src.python.Certificate import Certificate
-from src.python.Device import Device
 from src.python.Sidebar import Sidebar
 from src.python.Sign import Sign
 from src.signer_script import *
@@ -37,7 +36,7 @@ class HomeScreen(Screen):
         self.apk = Apk()
 
         self.box_layout.add_widget(
-            Label(text="Afif Grid//////////////////////////////////////////////////////////////////////"))
+            Label(text="Afif Grid"))
         # self.add_widget(self.box_layout)
         self.add_widget(self.nav)
         self.add_widget(self.apk)
@@ -47,6 +46,8 @@ class HomeScreen(Screen):
         self.toApkBtn.bind(on_press=lambda x: self.toApk())
 
     def toDevice(self):
+
+        from src.python.Device import Device
         self.device = Device()
         self.remove_widget(self.apk)
         self.remove_widget(self.device)
@@ -57,8 +58,7 @@ class HomeScreen(Screen):
         self.toApkBtn.background_color = 0.67, 0.67, 0.67, 1
         #self.toDeviceBtn.background_color = 0.89, 0.89, 0.89, 1
         #self.toDeviceBtn.background_color = 0.96, 0.99, 0.99, 1
-        # self.nav.ids.nav_label.text = "Alfahmi"
-        # self.parent.ids.
+
 
     def toApk(self):
         if self.isDeviceLayoutDispalyed:
@@ -69,21 +69,12 @@ class HomeScreen(Screen):
             self.add_widget(self.apk)
 
 
-
 Builder.load_file("../kivy_layouts/navbar.kv")
 
 
 class Navbar(Widget):
-    # ho = HomeScreen()
+
     pass
-
-
-
-
-
-
-# class Navbar(Widget):
-#     pass
 
 
 class SecondScreen(Screen):
@@ -92,11 +83,9 @@ class SecondScreen(Screen):
 
 kv = Builder.load_file('../kivy_layouts/home.kv')
 
-
 class NavApp(App):
     def build(self):
         return kv
-
 
 if __name__ == "__main__":
     NavApp().run()

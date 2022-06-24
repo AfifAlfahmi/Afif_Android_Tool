@@ -4,7 +4,7 @@ from kivy.lang import Builder
 from kivy.uix.widget import Widget
 
 from src.python import Apk
-from src.signer_script import signApk, testSignApk
+from src.signer_script import signApkTest, signApkProd
 
 Builder.load_file("../kivy_layouts/sign_layout.kv")
 
@@ -15,6 +15,7 @@ class Sign(Widget):
     signAlias: ObjectProperty(None)
     signKeyPass: ObjectProperty(None)
     apkFilePath = ""
+    certFilePath = ""
     isProdSign = True
     isTestSign = False
     signResult = ""
@@ -29,57 +30,42 @@ class Sign(Widget):
         self.sign_res_status = self.ids.sign_res_status
 
         self.signApkBtn.bind(on_press= lambda h:self.signApkValidation())
-
         self.testSignChBox.bind(active=self.on_checkbox_Active)
         self.prodSignChBox.bind(active=self.on_checkbox_Active)
 
 
-
-
     def signApkValidation(self):
-        print("start apk signing")
-        keyPath = self.keyPathET.text
+        #keyPath = self.keyPathET.text
         storePass = self.signStorePass.text
-
         keyPass = self.signKeyPass.text
         alias = self.signAlias.text
-        print(f'alias {alias}')
 
         if self.isProdSign:
-            print(f'prod sign selected')
 
-            if (not self.apkFilePath or not keyPath or not storePass or not keyPass or not alias):
-                print(f'empty apk path {self.apkFilePath}')
+            if (not self.apkFilePath or not self.certFilePath or not storePass or not keyPass or not alias):
                 self.signResult = "all the fields required"
                 self.sign_res_status.text = self.signResult
 
             else:
-                self.signResult = signApk(self.apkFilePath, keyPath, storePass, keyPass, alias)
+                self.signResult = signApkProd(self.apkFilePath, self.certFilePath, storePass, keyPass, alias)
                 self.sign_res_status.text = self.signResult
 
         else:
             if not self.apkFilePath:
                 self.sign_res_status.text = "empty apk path"
             else:
-                print(f'test sign selected')
-                self.signResult = testSignApk(self.apkFilePath)
+                self.signResult = signApkTest(self.apkFilePath)
                 self.sign_res_status.text = self.signResult
 
     def on_checkbox_Active(self,checkboxInstance, isActive):
 
         if  isActive and  self.testSignChBox.active:
-
-
-            print(f'test sign {checkboxInstance}')
             self.testSign()
 
         elif isActive and self.prodSignChBox.active :
-
-
-            print(f'prod sign {checkboxInstance}')
             self.prodSign()
-        else:
-             print("all unchecked")
+
+
 
 
     def prodSign(self):
