@@ -28,9 +28,7 @@ def getPackageName(self,manifest):
 
           if line.__contains__(package):
               apkInfoLine = line.split(' ')
-              print(f'package name line {apkInfoLine}')
               for item in apkInfoLine:
-                  print(f"apk info item: {item}")
                   if item.__contains__("package"):
 
                       packageName = item[9:len(item) - 1]
@@ -55,7 +53,6 @@ def getActivities(self,manifest):
         lanuchAbleAct = False
         for line in f:
             if line.__contains__(activityTag):
-                print(f"get activity line  : {line}")
 
                 inActivityTag = True
                 actNameFound = False
@@ -65,10 +62,8 @@ def getActivities(self,manifest):
 
                     if attribute.__contains__(androidName):
                         activityFullName = attribute.split('.')
-
                         actNameFound = True
                         activityName = activityFullName[-1][0:-1]
-                        print(f"item activityName : {activityName}")
 
                     if attribute.__contains__(androidExported):
                         lanuchAbleAct = True
@@ -84,8 +79,6 @@ def getActivities(self,manifest):
 
                             actNameFound = True
                             activityName = activityFullName[-1][0:-1]
-                            print(f"item activityName : {activityName}")
-                            # activityfullName = item[13:len(item) - 1]
 
                         if attribute.__contains__(androidExported):
                             lanuchAbleAct = True
@@ -128,24 +121,19 @@ def getReceivers(self,manifest):
         lanuchAbleRec = False
         for line in f:
             if line.__contains__(receiverTag):
-                print(f"get receiver line  : {line}")
 
                 inReceiverTag = True
                 recNameFound = False
                 splittedLine = re.split(r'( |>)', line)
-                print(f"items in splittedLine : {splittedLine}")
 
                 for attribute in splittedLine:
-                    print(f"item in splittedLine : {attribute}")
 
                     if attribute.__contains__(androidName):
                         print(f"attribute  : {attribute}")
                         receiverFullName = attribute.split('.')
-                        print(f"item receiverFullName : {receiverFullName}")
 
                         recNameFound = True
                         receiverName = receiverFullName[-1][0:-1]
-                        print(f"item receiverName : {receiverName}")
 
                     if attribute.__contains__(androidExported):
                         lanuchAbleRec = True
@@ -153,19 +141,15 @@ def getReceivers(self,manifest):
             if not recNameFound and inReceiverTag:
                 if line.__contains__(androidName):
                     splittedLine = re.split(r'( |>)', line)
-                    print(f"items in splittedLine : {splittedLine}")
 
                     for attribute in splittedLine:
-                        print(f"item in splittedLine : {attribute}")
 
                         if attribute.__contains__(androidName):
                             print(f"attribute  : {attribute}")
                             receiverFullName = attribute.split('.')
-                            print(f"item activityFullName : {receiverFullName}")
 
                             recNameFound = True
                             receiverName = receiverFullName[-1][0:-1]
-                            print(f"item activityName : {receiverName}")
 
                         if attribute.__contains__(androidExported):
                             lanuchAbleRec = True
@@ -178,15 +162,12 @@ def getReceivers(self,manifest):
                 print(f'{receiverName} has action')
                 lanuchAbleRec = True
                 splittedLine = re.split(r'( |/>)', line)
-                print(f"items in splittedLine action : {splittedLine}")
 
                 for attribute in splittedLine:
-                    print(f"item in splittedLine action : {attribute}")
 
                     if attribute.__contains__(androidName):
                         print(f"attribute  : {attribute}")
                         actionFullName = attribute.split('"')
-                        print(f"item actionFullName : {actionFullName}")
 
                         action = actionFullName[-2]
                         print(f"actionName  : {action}")

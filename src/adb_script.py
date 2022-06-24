@@ -13,10 +13,10 @@ apk = "nat_rel_signed.apk"
 
 adbDevsComm = 'adb devices'  # Get connected device
 
-subprocess.call(adbDevsComm,shell=True)
-
-out = os.popen('adb shell "dumpsys activity | grep "MainActivity""').read() #os.popen support for read operations
-print(out)
+# subprocess.call(adbDevsComm,shell=True)
+#
+# out = os.popen('adb shell "dumpsys activity | grep "MainActivity""').read() #os.popen support for read operations
+# print(out)
 
 
 client = AdbClient(host="127.0.0.1", port=5037)
@@ -56,21 +56,21 @@ def getPackages(device):
 
 
 
-for device in devices:
-    print(f'is app installed: {isAppInstalled(device,"com.example.nativeandroidapp")}')
-    #device.install(apk)
-
-    screenCap(device,'/sdcard/Download/sn.png')
-    pi = subprocess.Popen(adbDevsComm, shell=True, stdout=subprocess.PIPE)
-    print('devices: '+pi.stdout.read().decode("utf-8"))
-
-    for item in getPackages(device):
-        print("type of pack item :", type(item))
-        packStr = item.decode("utf-8")
-
-        print(packStr)
-
-    print("type of getPacks :",type(getPackages(device)))
+# for device in devices:
+#     print(f'is app installed: {isAppInstalled(device,"com.example.nativeandroidapp")}')
+#     #device.install(apk)
+#
+#     screenCap(device,'/sdcard/Download/sn.png')
+#     pi = subprocess.Popen(adbDevsComm, shell=True, stdout=subprocess.PIPE)
+#     print('devices: '+pi.stdout.read().decode("utf-8"))
+#
+#     for item in getPackages(device):
+#         print("type of pack item :", type(item))
+#         packStr = item.decode("utf-8")
+#
+#         print(packStr)
+#
+#     print("type of getPacks :",type(getPackages(device)))
 
 
 # for device in devices:
