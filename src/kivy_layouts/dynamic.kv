@@ -20,19 +20,24 @@
                 size: self.size
         Label:
             text: "Dynamic Analysis"
+            font_size: '18dp'
             size_hint: None, None # <---
-            pos_hint: {"x":0.5, "top":1.05}
+            pos_hint: {"center_x":0.5, "center_y":0.97}
+            font_size:root.width*0.02
         Button
             text: "Select Apk"
-            pos_hint:{"center_x": .3,"y":.82}
+            pos_hint:{"center_x": .42,"y":.82}
             size:root.width*0.12,root.height*0.08
             id: uploadApkAnylBtn
             size_hint: None, None # <---
+            font_size:root.width*0.02
         TextInput:
             id: apk_path_anyl_et
-            size:self.parent.width*0.4,self.parent.height*0.08
+            size:self.parent.width*0.25,self.parent.height*0.075
             size_hint: None, None # <---
-            pos_hint: {"x":0.38, "y":.82 }
+            pos_hint: {"x":0.48, "y":.824 }
+            padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+            halign:"center"
         FloatLayout:
 
             canvas.before:
@@ -71,6 +76,7 @@
                 color:(0, 0, 0, 1)
                 pos_hint: {"center_x": .5,"center_y":.92}
                 background_color:1,50,0,1
+                font_size:root.width*0.018
 
 
 
@@ -109,6 +115,7 @@
                 background_color:(0, 2, 5, 1)
                 size_hint: None, None # <---
                 pos_hint: {"center_x": .5,"center_y":.50}
+                font_size:root.width*0.018
             ScrollView:
 
                 do_scroll_x: True
@@ -133,8 +140,9 @@
                 text: ""
                 color:(0, 0, 0, 1)
                 id:anal_progress_label
+                size:root.width*0.12,root.height*0.07
                 size_hint: None, None # <---
-                pos_hint: {"x":0.40, "center_y":0.30}
+                pos_hint: {"x":0.42, "center_y":0.30}
 
             ProgressBar:
                 id: analysis_progress_bar
@@ -146,11 +154,12 @@
                 opacity:0
 
             Button
-                text: "Analysis"
+                text: "Analyze"
                 pos_hint:{"center_x": .5,"y":.12}
-                size:root.width*0.12,root.height*0.08
+                size:root.width*0.12,root.height*0.07
                 id: analBtn
                 size_hint: None, None # <---
+                font_size:root.width*0.02
 
 
 

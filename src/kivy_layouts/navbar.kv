@@ -11,17 +11,18 @@
             Rectangle:
                 pos: self.pos
                 size: self.size
-        pos: 0, root.height-root.height*0.17
+        pos: 0, root.height-root.height*0.13
         background_color: 0.5,.3,.5,1
 
         BoxLayout:
             orientation: "horizontal" #vertical
-            size: root.width,root.height*0.17
+            size: root.width,root.height*0.13
             size_hint: None, None # <---
             pos_hint: {"x":0, "y":0}
             #pos: 10, root.height-100
             #padding:20
-            spacing:10
+            spacing:root.width*0.001
+
             canvas.before:
                 Color:
                     #rgba: 153, 102, 51, 1
@@ -33,17 +34,21 @@
             Button:
                 text: "Apk"
                 id: apkbtn
-                size: 100, 100
+                size: root.width*0.10, root.height*0.13
                 size_hint: None, None # <---
                 pos_hint: {"x":0, "y":0}
+                font_size:root.width*0.02
+
 
 
             Button:
                 text: "Device"
                 id: devbtn
-                size: 100, 100
+                background_color:( 0.67, 0.67, 0.67, 1)
+                size: root.width*0.10, root.height*0.13
                 size_hint: None, None # <---
                 pos_hint: {"x":0, "y":0}
+                font_size:root.width*0.02
                 #on_release:
                     #self.parent.parent.parent.parent.nav.ids.nav_label.text = "uqu"
                     #app.homeScreen.toDevice(self)

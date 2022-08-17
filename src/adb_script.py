@@ -13,10 +13,10 @@ apk = "nat_rel_signed.apk"
 
 adbDevsComm = 'adb devices'  # Get connected device
 
-subprocess.call(adbDevsComm,shell=True)
-
-out = os.popen('adb shell "dumpsys activity | grep "MainActivity""').read() #os.popen support for read operations
-print(out)
+# subprocess.call(adbDevsComm,shell=True)
+#
+# out = os.popen('adb shell "dumpsys activity | grep "MainActivity""').read() #os.popen support for read operations
+# print(out)
 
 
 client = AdbClient(host="127.0.0.1", port=5037)
@@ -49,28 +49,37 @@ def screenCap(device,dest):
 
 def getPackages(device):
     getAppsPacksComm = "adb shell pm list packages"
-    procPackages = subprocess.Popen(getAppsPacksComm, shell=True, stdout=subprocess.PIPE)
-    packages = procPackages.communicate()
-    splitedPackges = packages[0].splitlines()
-    return splitedPackges
+    client = AdbClient(host="127.0.0.1", port=5037)
+    devices = client.devices()
+    dev1 = devices[0]
+    #procPackages = subprocess.Popen(getAppsPacksComm, shell=True, stdout=subprocess.PIPE)
+    procPackages = dev1.shell('pm list packages')
+    procPackages = procPackages.splitlines()
+
+
+    print(f'packages {type(procPackages[0])}')
+
+    # packages = procPackages.communicate()
+    # splitedPackges = packages[0].splitlines()
+    return procPackages
 
 
 
-for device in devices:
-    print(f'is app installed: {isAppInstalled(device,"com.example.nativeandroidapp")}')
-    #device.install(apk)
-
-    screenCap(device,'/sdcard/Download/sn.png')
-    pi = subprocess.Popen(adbDevsComm, shell=True, stdout=subprocess.PIPE)
-    print('devices: '+pi.stdout.read().decode("utf-8"))
-
-    for item in getPackages(device):
-        print("type of pack item :", type(item))
-        packStr = item.decode("utf-8")
-
-        print(packStr)
-
-    print("type of getPacks :",type(getPackages(device)))
+# for device in devices:
+#     print(f'is app installed: {isAppInstalled(device,"com.example.nativeandroidapp")}')
+#     #device.install(apk)
+#
+#     screenCap(device,'/sdcard/Download/sn.png')
+#     pi = subprocess.Popen(adbDevsComm, shell=True, stdout=subprocess.PIPE)
+#     print('devices: '+pi.stdout.read().decode("utf-8"))
+#
+#     for item in getPackages(device):
+#         print("type of pack item :", type(item))
+#         packStr = item.decode("utf-8")
+#
+#         print(packStr)
+#
+#     print("type of getPacks :",type(getPackages(device)))
 
 
 # for device in devices:

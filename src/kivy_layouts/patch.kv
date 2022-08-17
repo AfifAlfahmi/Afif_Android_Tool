@@ -21,7 +21,9 @@
         Label:
             text: "Patch Apk"
             size_hint: None, None # <---
-            pos_hint: {"x":0.5, "top":1.05}
+            size:root.width*0.1,self.parent.height*0.05
+            pos_hint: {"x":0.48, "y":0.95}
+            font_size:root.width*0.02
         FloatLayout:
 
             canvas.before:
@@ -37,27 +39,31 @@
             size_hint: None, None # <---
             Button
                 text: "Select Apk"
-                pos_hint:{"center_x": .2,"y":.75}
-                size:root.width*0.12,root.height*0.1
+                pos_hint:{"center_x": .30,"y":.80}
+                size:root.width*0.12,root.height*0.08
                 id: uploadApkBtn
                 size_hint: None, None # <---
+                font_size:root.width*0.018
             TextInput:
                 id: apk_path_et
-                size:self.parent.width*0.5,self.parent.height*0.10
+                size:self.parent.width*0.42,self.parent.height*0.084
                 size_hint: None, None # <---
-                pos_hint: {"x":0.30, "y":.76}
+                pos_hint: {"x":0.40, "y":.805}
+                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                halign: "center"
             Label:
                 text: "Log Functions Names"
-
                 id:log_funs_label
+                size:root.width*0.08,self.parent.height*0.05
                 size_hint: None, None # <---
-                pos_hint: {"x":0.30, "center_y":0.65}
+                pos_hint: {"x":0.4, "center_y":0.65}
+                font_size:root.width*0.018
             Label:
                 text: ""
-
                 id:progress_label
+                size:root.width*0.1,self.parent.height*0.05
                 size_hint: None, None # <---
-                pos_hint: {"x":0.40, "center_y":0.50}
+                pos_hint: {"x":0.41, "center_y":0.50}
             ProgressBar:
                 id: patch_progress_bar
                 #value: .25
@@ -69,19 +75,28 @@
             CheckBox:
                 id: log_funs_check_box
                 text: "Log funs checkbox"
-
-                pos_hint: {"x":0.65, "center_y":0.65}
+                background_color:(255, 255, 255, 1)
+                pos_hint: {"x":0.62, "center_y":0.64}
                 size:root.width*0.03,self.parent.height*0.05
                 size_hint: None, None # <---
                 active: True
+                canvas.before:
+                    Color:
+                        rgb: utils.get_color_from_hex('#e6e6ff')
+                    Rectangle:
+                        pos:self.center_x-7, self.center_y-7
+                        size: 20,20
+
 
 
 
             Button
-                text: "Make it Debuggable"
+                text: "Make it debuggable"
 
                 pos_hint:{"center_x": .5,"center_y":.37}
-                size:root.width*0.20,root.height*0.05
+                size:root.width*0.175,root.height*0.07
                 id: debugApkBtn
                 size_hint: None, None # <---
+                font_size:root.width*0.018
+
 

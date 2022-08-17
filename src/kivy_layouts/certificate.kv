@@ -20,12 +20,16 @@
                 pos: self.pos
                 size: self.size
         Label:
-            size_hint: None, None # <---
-            pos_hint: {"x":0.5, "top":1.05}
             text: "Generate Cert"
+            font_size: '18dp'
+            size:root.width*0.11,root.height*0.05
+            size_hint: None, None # <---
+            pos_hint: {"x":0.49, "center_y":0.95}
+            font_size:root.width*0.02
+
 
         FloatLayout:
-            #padding:30
+
             #spacing: 20
             #cols: 2
             #rows: 2
@@ -37,27 +41,30 @@
                 Rectangle:
                     pos: self.pos
                     size: self.size
-            size:self.parent.width*0.6,self.parent.height*0.88
-            pos_hint: {"x":0.24, "top":0.9}
+            size:self.parent.width*0.6,self.parent.height*0.76
+            pos_hint: {"x":0.26, "y":0.16}
             pos: self.pos
             size_hint: None, None # <---
             Label:
-                text:"out Key File: "
+                text:"Out Key File "
                 font_size:root.width*0.025
                 pos_hint: {"x":0.13, "top":0.9}
                 size:self.parent.width*0.1,self.parent.height*0.05
                 size_hint: None, None # <---
 
             TextInput:
+                hint_text:'ex: keystore'
                 id: outKeyFile
                 font_size: 18
                 multiline: False
                 pos_hint: {"x": 0.30 , "top":0.9}
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
+                font_size:root.width*0.018
+                halign: "center"
 
             Label:
-                text:"CName: "
+                text:"CName "
                 font_size: root.width*0.025
 
                 pos_hint: {"x":0.13, "top":0.8}
@@ -74,8 +81,10 @@
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
             Label:
-                text:"Alias:"
+                text:"Alias"
                 font_size: root.width*0.025
 
                 pos_hint: {"x":0.13, "top":0.7}
@@ -91,8 +100,10 @@
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
             Label:
-                text:"org:"
+                text:"Org"
                 font_size: root.width*0.025
 
                 pos_hint: {"x":0.13, "top":0.6}
@@ -108,8 +119,10 @@
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
             Label:
-                text:"loc:"
+                text:"Loc"
                 font_size: root.width*0.025
 
                 pos_hint: {"x":0.13, "top":0.5}
@@ -125,11 +138,13 @@
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
 
 
 
             Label:
-                text:"country:"
+                text:"Country"
                 font_size: root.width*0.025
 
                 pos_hint: {"x":0.13, "top":0.4}
@@ -138,16 +153,17 @@
 
 
             TextInput:
-                id: country
+                id:country
                 font_size: 18
                 multiline: False
-                password: True
                 pos_hint: {"x": 0.30, "top":0.4}
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
             Label:
-                text:"store Pass: "
+                text:"Store pass "
                 font_size: root.width*0.025
 
                 pos_hint: {"x":0.13, "top":0.3}
@@ -159,13 +175,16 @@
                 id: storePass
                 font_size: 18
                 multiline: False
+                password: True
                 pos_hint: {"x": 0.30, "top":0.3}
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
 
             Label:
-                text:"keyPass: "
+                text:"Key pass "
                 font_size: root.width*0.025
 
                 pos_hint: {"x":0.13, "top":0.2}
@@ -182,12 +201,21 @@
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
+        Label:
+            text:""
+            id:cert_res_status
+            pos_hint: {"center_x":0.543, "center_y":0.18 }
+            size:100,30
+
+            size_hint: None, None # <---
 
         Button:
-            id: creCertBtn
-            pos_hint:{"x":0.5,"y":0.06}
-            size: 100, 30
-            size_hint: None, None # <---
-            font_size: 18
             text: "Create"
-            # on_release:
+            id: creCertBtn
+            pos_hint:{"x":0.49,"y":0.07}
+            size:root.width*0.11,root.height*0.05
+            size_hint: None, None # <---
+            font_size:root.width*0.02
+

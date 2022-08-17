@@ -3,6 +3,8 @@ import subprocess
 import os
 import time
 from os.path import exists
+from pathlib import Path
+
 ADB = shutil.which("adb")
 
 out = os.popen('adb shell "dumpsys activity | grep "MainActivity""').read() #os.popen support for read operations
@@ -17,32 +19,25 @@ def getApk(packageName):
   pathRes = resultStr[8:-1]
   tupleResult = pathReq.communicate()
   splitedPath = tupleResult[0].splitlines()
-  workDir = f"{os.getcwd()}\workDir"
+
+  currScript = os.path.dirname(__file__)
+  homeDir = Path(currScript).parent.absolute()
+  workDir = Path(homeDir / "workDir")
+
   #print(f"pull apk dir: {workDir}")
   first_apk = pathRes.index('.apk')
   formattedPath = pathRes[0:first_apk+4]
-  print(f"formatted str:{formattedPath}")
   pathRes = pathRes.strip()
   pullComm = f'adb pull {formattedPath} {workDir}'
-  print(f"pull command: {pullComm}")
-  print(f"package name: {packageName}")
-
-
   subprocess.Popen(pullComm, shell=True, stdout=subprocess.PIPE).wait()
 
   for i in range(4):
-    print(f'i = {i}')
-    if exists(f'{workDir}\\base.apk'):
-      os.rename(f'{workDir}\\base.apk', f'{workDir}\\{packageName}.apk')
+    baseApkPath = Path(workDir/'base.apk')
+    destApkPath = Path(workDir / f'{packageName}.apk')
+    if exists(baseApkPath):
+      os.rename(baseApkPath, destApkPath)
+      break
+
     time.sleep(1)
 
-
-
-
-  #print(f'result of str {resultStr}')
-  #print(f'path of result: {pathRes}')
-  #print(f'type of str {type(resultStr)}')
-
-
-#getApk(packageName)
 

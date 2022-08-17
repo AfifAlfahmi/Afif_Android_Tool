@@ -4,11 +4,11 @@
         cols: 1
         rows: 3
 
-        size: root.width*0.12,  root.height
+        size: root.width*0.10,  root.height
         pos_hint:{'top': 1}
         size_hint: None, None # <---
 
-        padding:0,30
+        padding:0,0
         canvas.before:
             Color:
                 #rgba: 1, 0.3, 0.2, 1
@@ -21,26 +21,31 @@
         Button:
             text: "Sign Apk"
             id: btn1
-            size:root.width*0.12,root.height*0.1
+            size:root.width*0.10,root.height*0.1
             size_hint: None, None # <---
             pos: 10,250
             #pos_hint: {"x":0, "y":0.9}
             pos_hint:{'top': 0.5}
+            font_size:root.width*0.02
         Button:
             text: "Patch Apk"
             id: btn2
-            size:root.width*0.12,root.height*0.1
+            background_color:( 0.67, 0.67, 0.67, 1)
+            size:root.width*0.10,root.height*0.1
             size_hint: None, None # <---
             pos: 10,250
             #pos_hint: {"x":0, "y":0.9}
             pos_hint:{'top': 0.5}
+            font_size:root.width*0.02
 
 
         Button:
             text: "Dynamic"
             id: btn3
-            size:root.width*0.12,root.height*0.1
+            background_color:( 0.67, 0.67, 0.67, 1)
+            size:root.width*0.10,root.height*0.1
             size_hint: None, None # <---
             pos: 10,250
             #pos_hint: {"x":0, "y":0.9}
             pos_hint:{'top': 0.5}
+            font_size:root.width*0.02

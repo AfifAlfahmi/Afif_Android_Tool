@@ -14,7 +14,7 @@ from src.python.Dynamic import Dynamic
 from src.python.Sidebar import Sidebar
 from src.python.Sign import Sign
 from src.python.Patch import Patch
-from src.signer_script import generateCert, signApk, decompileApk, getApkDestinationFolder, buildApk, buildApk, \
+from src.signer_script import generateCert, signApkProd, decompileApk, getApkDestinationFolder, buildApk, buildApk, \
     decompileApk, zipAlignApk
 from kivy.clock import Clock
 
@@ -37,6 +37,7 @@ class Apk(Widget):
 
 
     selectedApk = ""
+    selectedCert = ""
 
     def __init__(self, **kwargs):
         super(Apk, self).__init__(**kwargs)
@@ -82,23 +83,20 @@ class Apk(Widget):
 
 
     def uploadApk(self,type):
-        print("start uploadApk fun")
 
 
         filechooser.open_file(on_selection=self.fileSelected)
-        print("After file extracted")
-        selectedFile = Path(self.selectedApk)
+        print("file uploaded")
+        self.selectedApk = Path(self.selectedApk)
         if type == "sign":
-
-           self.signLayout.apk_path_et.text = selectedFile.name
+           self.signLayout.apk_path_et.text = self.selectedApk.name
            self.signLayout.apkFilePath = self.selectedApk
-           print("sign")
 
         elif type == "patch":
-           self.patchLayout.apk_path_et.text = selectedFile.name
-           print("patch")
+           self.patchLayout.apk_path_et.text = self.selectedApk.name
+
         else:
-            self.dynamic.apk_path_anyl_et.text = selectedFile.name
+            self.dynamic.apk_path_anyl_et.text = self.selectedApk.name
             self.dynamic.apkFilePath = self.selectedApk
 
 
@@ -110,34 +108,32 @@ class Apk(Widget):
     def fileSelected(self, selection):
 
         # print(selection)
+        self.signLayout.sign_res_status.text = ""
         if selection:
             if selection[0].endswith(".apk"):
-                print("ext APK")
                 self.selectedApk = selection[0]
 
-            elif  selection[0].endswith(".jks") or selection[0].endswith(".KEYSTORE"):
-                self.signLayout.keyPathET.text = selection[0]
+            elif  selection[0].endswith(".jks") or selection[0].endswith(".KEYSTORE") or selection[0].endswith(".keystore"):
+                self.selectedCert = Path(selection[0])
+                self.signLayout.keyPathET.text = self.selectedCert.name
+                self.signLayout.certFilePath = self.selectedCert
                 #self.signApkValidation()
             else:
-                print(selection[0])
-                self.decompileApkBtn.opacity = 0
-                self.log_funs_label.opacity = 1
-                self.log_funs_check_box.opacity = 1
-                self.debugApkBtn.opacity = 1
+                print(f'file extension not supported  {selection[0]}')
+                # self.decompileApkBtn.opacity = 0
+                # self.log_funs_label.opacity = 1
+                # self.log_funs_check_box.opacity = 1
+                # self.debugApkBtn.opacity = 1
+
     def on_checkbox_active(self,checkbox, value):
         if value == True:
-            print(f'check box checked {checkbox.text}')
             self.logFunctions = True
 
         else:
-            print('check box unchecked')
             self.logFunctions = False
 
     def threaded_function(self,arg):
-
-
-        print("thread running")
-        print(f"unzipped apk {decompileApk(self.selectedApk, True)}")
+        print(f"unzipped apk")
 
         # wait 1 sec in between each thread
     def operationsSchedule(self):
@@ -145,14 +141,7 @@ class Apk(Widget):
         if not self.selectedApk == "":
             self.progressBar.value = 0
             self.progressBar.opacity = 1
-
-            # self.add_widget(self.pb)
-
-            print(f"before decompile ")
-
-
-
-            print(f"unzipped apk {decompileApk(self.selectedApk, True)}")
+            print(f"{decompileApk(self.selectedApk, True)}")
             self.progressLabel.text = "decompiling..."
             # thread = Thread(target=self.threaded_function, args=(10,))
             # thread.start()
@@ -174,14 +163,11 @@ class Apk(Widget):
         #projectPath = Path(srcDir/"deb_tool")
         projectPath = getApkDestinationFolder(self.selectedApk)
         packageName = getPackageName(self,openManifest(self,projectPath))
-        print(f"getPackage name {packageName}")
 
         if self.logFunctions:
             logFunName(projectPath, packageName)
             patchManifestDebuggable(openManifest(self,projectPath))
-        # else:
-        #
-        #     patchManifestDebuggable()
+
         self.isPatched = True
 
     def next(self, dt):
@@ -212,10 +198,8 @@ class Apk(Widget):
 
 
     def toCert(self):
-        print("start to cert")
 
         if not self.certLayOutDidplayed:
-            print("cert layout not displayed")
             self.apkLayout.remove_widget(self.signLayout)
             self.apkLayout.add_widget(self.certLayout)
             self.certLayOutDidplayed = True
@@ -226,9 +210,7 @@ class Apk(Widget):
         self.apkLayout.add_widget(self.sidebar)
 
     def toSign(self):
-        print("to sign")
 
-        #self.certLayout.opacity = 0
         if not self.signLayoutDisplayed:
             self.apkLayout.remove_widget(self.signLayout)
             self.apkLayout.remove_widget(self.certLayout)
@@ -241,6 +223,9 @@ class Apk(Widget):
             self.certLayOutDidplayed = False
             self.dynamicLayoutDisplayed = False
             self.signLayoutDisplayed = True
+            self.signBtn.background_color = 1, 1, 1, 1
+            self.patchBtn.background_color = 0.67, 0.67, 0.67, 1
+            self.dynamicBtn.background_color = 0.67, 0.67, 0.67, 1
 
 
         self.apkLayout.remove_widget(self.sidebar)
@@ -254,6 +239,10 @@ class Apk(Widget):
             self.apkLayout.remove_widget(self.certLayout)
             self.apkLayout.remove_widget(self.patchLayout)
             self.apkLayout.remove_widget(self.dynamic)
+            self.patchBtn.background_color = 1, 1, 1, 1
+            self.signBtn.background_color = 0.67, 0.67, 0.67, 1
+            self.dynamicBtn.background_color = 0.67, 0.67, 0.67, 1
+
 
 
             self.apkLayout.add_widget(self.patchLayout)
@@ -281,5 +270,8 @@ class Apk(Widget):
             self.signLayoutDisplayed = False
             self.certLayOutDidplayed = False
             self.dynamicLayoutDisplayed = True
+            self.dynamicBtn.background_color = 1, 1, 1, 1
+            self.signBtn.background_color = 0.67, 0.67, 0.67, 1
+            self.patchBtn.background_color = 0.67, 0.67, 0.67, 1
         self.apkLayout.remove_widget(self.sidebar)
         self.apkLayout.add_widget(self.sidebar)

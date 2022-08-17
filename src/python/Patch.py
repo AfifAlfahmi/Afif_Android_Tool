@@ -5,8 +5,6 @@ from kivy.uix.widget import Widget
 
 
 
-
-
 Builder.load_file("../kivy_layouts/patch.kv")
 
 class Patch(Widget):

@@ -1,92 +1,66 @@
-import shutil
-import zipfile
-import tempfile
+
 import os,re
 import pathlib
 
 
 
-
-
-
 def logFunName(project,packageName):
-    for path in pathlib.Path(project).iterdir():
+    for smaliFolder in pathlib.Path(project).iterdir():
 
-        if path.is_dir():
-            if path.name.__contains__("smali"):
-                print(f"smali folder {path.name}")
+        if smaliFolder.is_dir():
+            if smaliFolder.name.__contains__("smali"):
 
-                for path2 in pathlib.Path(path).iterdir():
-                    print(f"inside smali folder {path2.name}")
-                    if packageName.__contains__("com"):
-                        print(f"inside com folder")
-                        for path3 in pathlib.Path(path2).iterdir():
-                            if packageName.__contains__(path3.name):
-                                print(f"inside path3 folder {path3.name}")
+                for subPack1 in pathlib.Path(smaliFolder).iterdir():
+                    if packageName.__contains__(subPack1.name):
+                        print(f"found subPack1 com folder")
 
+                        for subPack2 in pathlib.Path(subPack1).iterdir():
+                            if packageName.__contains__(subPack2.name):
+                                print(f"found  subPack2 folder {subPack2.name}")
 
-                                for path4 in pathlib.Path(path3).iterdir():
-                                    print(f"inside path3 iter folder {path3.name}")
+                                for subPack3 in pathlib.Path(subPack2).iterdir():
 
                                     # #
-                                    if path4.name.__contains__('.smali'):
+                                    if subPack3.name.__contains__('.smali'):
                                         smaliFileName = smaliFile.name
-                                        if smaliFileName == "Information.smali":
-                                            logClassMethodName(path4)
+                                        if not smaliFileName.__contains__('$'):
+                                            logClassMethodName(subPack3)
 
-                                        print(f"found smali in folder {path4.name}")
-
-                                    else:
-                                        print(f'cannot find smali')
-
-                                    if packageName.__contains__(path4.name):
-                                        print(f"found path4 folder {path4.name}")
+                                    if packageName.__contains__(subPack3.name):
+                                        print(f"found subPack3 folder {subPack3.name}")
                                         smaliFileName = ""
-                                        for smaliFile in pathlib.Path(path4).iterdir():
+                                        for smaliFile in pathlib.Path(subPack3).iterdir():
 
                                             # check if file or package
                                             if os.path.isfile(smaliFile) :
 
                                                 smaliFileName = smaliFile.name
                                                 if not smaliFileName.__contains__('$'):
-
-                                                    # if smaliFileName == "RH.smali":
                                                     logClassMethodName(smaliFile)
-
-
-
-
 
                                             #internal packages
                                             else:
-                                                # if smaliFile.name == 'root':
-                                                print(f"in fragments package {path4.name}")
 
                                                 for smaliFile2 in pathlib.Path(smaliFile).iterdir():
 
                                                     smaliFileName = smaliFile2.name
                                                     if not smaliFileName.__contains__('$'):
 
-                                                        #if smaliFileName == "RootDetectorCore.smali":
-
                                                         logClassMethodName(smaliFile2)
 
+                                    else:
 
+                                        for smaliFile in pathlib.Path(subPack3).iterdir():
+                                            if os.path.isfile(smaliFile) :
+                                                smaliFileName = smaliFile.name
+                                                if not smaliFileName.__contains__('$'):
 
-
-
-
-
-
-
-
-
+                                                    logClassMethodName(smaliFile)
 
 
 
 
 def  logClassMethodName(path4):
-      print('in logClassMethodName')
       smaliFileName = path4.name
       with open(path4) as smaliFile, open(f"{smaliFile.name}out.smali", "w") as smaliOut:
           className = ""
@@ -104,7 +78,6 @@ def  logClassMethodName(path4):
               if line.startswith(".class"):
                   splittedLine = re.split(r'( )', line)
                   className = splittedLine[-1][0:-2]
-                  print(f"class name: {className}")
 
               if line.startswith(".method") :
                   if line.__contains__('constructor'):
@@ -117,7 +90,6 @@ def  logClassMethodName(path4):
                       endName = fullmethodname.index("(")
                       inMethod = True
                       methodName = fullmethodname[0:endName]
-                      print(f"found method: {methodName} end: {endName}")
 
 
 
@@ -129,8 +101,6 @@ def  logClassMethodName(path4):
                   newLocals = 0
                   splittedLine = re.split(r'( )', line)
                   numOfLocal = int(splittedLine[-1])
-                  print(f'type of numOfLocal {type(numOfLocal)} value: {numOfLocal}')
-                  print(f'numOfLocal all {splittedLine}')
 
                   if numOfLocal == 0 or numOfLocal == 1:
 
@@ -138,8 +108,6 @@ def  logClassMethodName(path4):
                   else:
                       newLocals = numOfLocal
 
-                  print(f'numOfLocal [-2]{splittedLine[-2]}')
-                  print(f'numOfLocal [-3]{splittedLine[-3]}')
                   line = f'    {splittedLine[-3]} {newLocals}\n'\
                    f'\n    const-string v0, "patchTag"\n\n' \
                     f'    const-string v1, "class: {className} method: {methodName}"\n\n' \
@@ -147,8 +115,6 @@ def  logClassMethodName(path4):
                   smaliOut.write(line)
               else:
                   smaliOut.write(line)
-
-
 
               if line.startswith(".end method"):
                   inMethod = False
@@ -160,7 +126,6 @@ def  logClassMethodName(path4):
                   splittedLineNum = re.split(r'( )', line)
 
                   currentLine = splittedLineNum[-1]
-                  print(f"splitted Line Num: {currentLine}")
 
               # if line.__contains__("return") and inMethod:
               #
