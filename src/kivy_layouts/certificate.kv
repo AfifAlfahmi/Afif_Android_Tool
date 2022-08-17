@@ -25,6 +25,7 @@
             size:root.width*0.11,root.height*0.05
             size_hint: None, None # <---
             pos_hint: {"x":0.49, "center_y":0.95}
+            font_size:root.width*0.02
 
 
         FloatLayout:
@@ -45,7 +46,7 @@
             pos: self.pos
             size_hint: None, None # <---
             Label:
-                text:"out Key File "
+                text:"Out Key File "
                 font_size:root.width*0.025
                 pos_hint: {"x":0.13, "top":0.9}
                 size:self.parent.width*0.1,self.parent.height*0.05
@@ -59,6 +60,8 @@
                 pos_hint: {"x": 0.30 , "top":0.9}
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
+                font_size:root.width*0.018
+                halign: "center"
 
             Label:
                 text:"CName "
@@ -78,6 +81,8 @@
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
             Label:
                 text:"Alias"
                 font_size: root.width*0.025
@@ -95,8 +100,10 @@
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
             Label:
-                text:"org"
+                text:"Org"
                 font_size: root.width*0.025
 
                 pos_hint: {"x":0.13, "top":0.6}
@@ -112,8 +119,10 @@
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
             Label:
-                text:"loc"
+                text:"Loc"
                 font_size: root.width*0.025
 
                 pos_hint: {"x":0.13, "top":0.5}
@@ -129,11 +138,13 @@
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
 
 
 
             Label:
-                text:"country"
+                text:"Country"
                 font_size: root.width*0.025
 
                 pos_hint: {"x":0.13, "top":0.4}
@@ -149,8 +160,10 @@
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
             Label:
-                text:"store Pass "
+                text:"Store pass "
                 font_size: root.width*0.025
 
                 pos_hint: {"x":0.13, "top":0.3}
@@ -167,9 +180,11 @@
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
 
             Label:
-                text:"keyPass "
+                text:"Key pass "
                 font_size: root.width*0.025
 
                 pos_hint: {"x":0.13, "top":0.2}
@@ -186,6 +201,8 @@
                 size:self.parent.width*0.5,self.parent.height*0.08
                 size_hint: None, None # <---
                 #size_hint: 0.04, 0.03
+                font_size:root.width*0.018
+                halign: "center"
         Label:
             text:""
             id:cert_res_status
@@ -200,5 +217,5 @@
             pos_hint:{"x":0.49,"y":0.07}
             size:root.width*0.11,root.height*0.05
             size_hint: None, None # <---
-            font_size: 18
+            font_size:root.width*0.02
 

@@ -27,11 +27,34 @@ def signApkTest(apk):
     apk_sign_comm = ""
     osName = sys.platform
 
-    if osName.__contains__('win'):
+    if osName.startswith('win'):
+        whichApksigner = shutil.which("apksigner")
+        if not whichApksigner:
+            print('you have to download apksigner and add it to the Environment Variables ')
+
         apk_sign_comm = f"apksigner.bat sign --v2-signing-enabled --ks {keyPath} --ks-key-alias {alias} --ks-pass pass:{storePass} --key-pass pass:{keyPass} {apk}"
 
     else:
-        apk_sign_comm = f"apksigner sign --v2-signing-enabled --ks {keyPath} --ks-key-alias {alias} --ks-pass pass:{storePass} --key-pass pass:{keyPass} {apk}"
+        currScript = os.path.dirname(__file__)
+        homeDir = Path(currScript).parent.absolute()
+
+
+        whichApksigner = shutil.which("apksigner")
+        if not whichApksigner:
+            whichApksigner = shutil.which("/usr/bin/apksigner")
+            if not whichApksigner:
+                print('you have to download apksigner and add it to the Environment path ')
+
+
+        apk_sign_comm = [
+            whichApksigner,
+            "sign", "--v2-signing-enabled",
+            "--ks", keyPath,
+            "--ks-key-alias", alias,
+            "--ks-pass", 'pass:'+storePass,
+            "--key-pass", 'pass:'+keyPass,
+            apk
+        ]
 
     p = subprocess.run(apk_sign_comm, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False)
     if p.returncode > 0:
@@ -58,11 +81,50 @@ def signApkProd(apk,keyPath,storePass,keyPass,alias):
     apk_sign_comm = ""
     osName = sys.platform
 
-    if osName.__contains__('win'):
+    if osName.startswith('win'):
+
+        whichApksigner = shutil.which("apksigner")
+        if not whichApksigner:
+            print('you have to download apksigner and add it to the Environment Variables ')
+
         apk_sign_comm = f"apksigner.bat sign --v2-signing-enabled --ks {keyPath} --ks-key-alias {alias} --ks-pass pass:{storePass} --key-pass pass:{keyPass} {apk}"
 
     else:
-        apk_sign_comm = f"apksigner sign --v2-signing-enabled --ks {keyPath} --ks-key-alias {alias} --ks-pass pass:{storePass} --key-pass pass:{keyPass} {apk}"
+        currScript = os.path.dirname(__file__)
+        homeDir = Path(currScript).parent.absolute()
+        #execSigner = Path(homeDir).joinpath('src/bins/linux/apksigner')
+
+        whichApksigner = shutil.which("apksigner")
+        if not whichApksigner:
+            whichApksigner = shutil.which("/usr/bin/apksigner")
+            if not whichApksigner:
+                print('you have to download apksigner and add it to the Environment path ')
+
+
+        apk_sign_comm = [
+            'apksigner',
+            "sign","--v2-signing-enabled",
+            "--ks",keyPath,
+            "--ks-key-alias",alias,
+            "--ks-pass", 'pass:'+storePass,
+            "--key-pass", 'pass:'+keyPass,
+            apk
+        ]
+
+
+
+        # parameters = ['--ks', keyPath, '--ks-key-alias', alias, '--ks-pass', 'pass:{}'.format(storePass), '--key-pass',
+        #            'pass:{}'.format(keyPass)]
+        # signed_apk = apk.parent.joinpath('mysigned.apk')
+        # cmd = [execSigner, 'sign'] + parameters + ['--out', str(signed_apk.resolve()), str(apk.resolve())]
+
+
+
+        # out = subprocess.run(apk_sign_comm)
+        # print(f'out from signer {out}')
+
+
+
 
     p = subprocess.run(apk_sign_comm, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False)
     if p.returncode > 0:
@@ -86,7 +148,7 @@ def signApkProd(apk,keyPath,storePass,keyPass,alias):
     else:
         result = "Apk signed successfully"
 
-
+    #
     return  result
 
 
@@ -94,13 +156,55 @@ def signApkProd(apk,keyPath,storePass,keyPass,alias):
 
 def generateCert(outKeyFile,CName,orgUint,org,loc,country,keyPass,storePass,alias):
     result = ""
+
+
     currScript = os.path.dirname(__file__)
     homeDir = Path(currScript).parent.absolute()
     certsPath = Path(homeDir/"workDir/certs/")
     outKeyFilePath  = Path(certsPath).joinpath(outKeyFile)
 
+    osName = sys.platform
+    keytoolCommand = ""
 
-    keytoolCommand = f'keytool -genkey -v -keystore {outKeyFilePath} -dname "CN={CName}, OU={orgUint}, O={org}, L={loc}, C={country}" -keypass {keyPass} -storepass {storePass} -alias {alias} -keyalg RSA -keysize 2048 -validity 10000'
+    if osName.startswith('win'):
+
+        whichKeytool = shutil.which("keytool")
+        if not whichKeytool:
+            print('you have to download jdk and add jdk/bin to the Environment Variables ')
+
+
+
+        keytoolCommand = f'keytool -genkey -v -keystore {outKeyFilePath} -dname "CN={CName}, OU={orgUint}, O={org}, L={loc}, C={country}" -keypass {keyPass} -storepass {storePass} -alias {alias} -keyalg RSA -keysize 2048 -validity 10000'
+
+    else:
+        currScript = os.path.dirname(__file__)
+        homeDir = Path(currScript).parent.absolute()
+        print(f'path keytool home {homeDir}')
+
+
+        whichKeytool = shutil.which("keytool")
+        if not whichKeytool:
+            whichKeytool = shutil.which("/usr/bin/keytool")
+            if not whichKeytool:
+                print('you have to download jdk and add jdk/bin to the Environment path ')
+
+
+
+        dname = f"CN={CName}, OU={orgUint}, O={org}, L={loc}, C={country}"
+        keytoolCommand = [
+            whichKeytool,
+            "-genkey", "-v",
+            "-keystore", outKeyFilePath,
+            "-dname",dname,
+            "-keypass", keyPass,
+            "-storepass", storePass,
+            "-alias",alias,
+            "-keyalg","RSA"
+            ,"-keysize","2048"
+            ,"-validity","10000"
+        ]
+
+
 
     #p = os.system(keytoolCommand)
     p = subprocess.run(keytoolCommand, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False)
@@ -123,6 +227,8 @@ def generateCert(outKeyFile,CName,orgUint,org,loc,country,keyPass,storePass,alia
     return result
 
 
+
+
 ADB = shutil.which("adb")
 
 
@@ -130,18 +236,64 @@ def decompileApk(apk,isPatch):
 
     # Unzip
     #zip_ref = zipfile.ZipFile(apk, 'r')
-
     apkPath = Path(apk)
-    decomipleCommand = ""
-    if isPatch:
-        decomipleCommand = f'apktool d {apkPath} -o {getApkDestinationFolder(apk)}'
+    osName = sys.platform
+
+    if osName.startswith('win'):
+        print(f'os name{sys.platform.startswith()}')
+
+        whichApktool = shutil.which("apktool")
+        if not whichApktool:
+            print('you have to download Apktool and add it to the Environment Variables ')
+
+
+        decomipleCommand = ""
+        if isPatch:
+            decomipleCommand = f'apktool d {apkPath} -o {getApkDestinationFolder(apk)}'
+        else:
+            decomipleCommand = f'apktool d {apkPath} -f -o {getApkAnylDestinationFolder(apk)}'
+
     else:
-        decomipleCommand = f'apktool d {apkPath} -f -o {getApkAnylDestinationFolder(apk)}'
-    # subprocess.run(decomipleCommand, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False
-    process = subprocess.Popen(decomipleCommand, shell=True, stdout=subprocess.PIPE)
+        currScript = os.path.dirname(__file__)
+        homeDir = Path(currScript).parent.absolute()
+
+        whichApktool = shutil.which("apktool")
+        if not whichApktool:
+            whichApktool = shutil.which("/usr/local/bin/apktool")
+            if not whichApktool:
+                print('you have to download Apktool and add it to the Environment path ')
+
+
+
+        if isPatch:
+            decomipleCommand = [
+                whichApktool,
+                "d",
+                apkPath,
+                "-o", getApkDestinationFolder(apk)
+            ]
+        else:
+            decomipleCommand = [
+                whichApktool,
+                "d",
+                apkPath,
+                "-o", getApkAnylDestinationFolder(apk)
+            ]
+
+    p = subprocess.Popen(decomipleCommand, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False)
+
+    subprocess.call("adb devices", shell=True)
+
+    # stdOut = p.stdout.decode("utf8")
+    # print(f'decompile result {stdOut}')
+
+
 
     # if process.returncode != 0:
     #     print(f"returncode != 0 ")
+
+
+
     #zip_ref.extractall(distDir)
     #zip_ref.close()
     #zipApk(workingdir)
@@ -157,6 +309,7 @@ def getApkDestinationFolder(apk):
     destDir = Path(workDir / appFolder)
 
     return destDir
+
 def getApkAnylDestinationFolder(apk):
     apkPath = Path(apk)
     appFolder = apkPath.stem
@@ -175,10 +328,44 @@ def buildApk(appFolder):
     # print("start APK Building")
     # shutil.make_archive("new", 'zip', appFolder)
     # shutil.move("new.zip", "nat_zipped.apk")
+    osName = sys.platform
+    buildCommand = ""
 
-    buildCommand = f'apktool b {appFolder}'
+    if osName.startswith('win'):
+        print(f'os name{sys.platform.startswith()}')
 
-    process = subprocess.Popen(buildCommand, shell=True, stdout=subprocess.PIPE)
+        whichApktool = shutil.which("apktool")
+        if not whichApktool:
+            print('you have to download Apktool and add it to the Environment Variables ')
+
+        buildCommand = f'apktool b {appFolder}'
+
+        #process = subprocess.Popen(buildCommand, shell=True, stdout=subprocess.PIPE)
+
+
+    else:
+
+        currScript = os.path.dirname(__file__)
+        homeDir = Path(currScript).parent.absolute()
+
+        whichApktool = shutil.which("apktool")
+        if not whichApktool:
+            whichApktool = shutil.which("/usr/local/bin/apktool")
+            if not whichApktool:
+                print('you have to download Apktool and add it to the Environment path ')
+
+
+
+        buildCommand = [
+            whichApktool,
+            "b",
+            appFolder
+        ]
+
+    p = subprocess.Popen(buildCommand, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False)
+
+
+
 
 
 
@@ -188,14 +375,48 @@ def zipAlignApk(selectedApk):
     apkName = Path(selectedApk).name
     distFolder = Path(projectPath/"dist")
     srcApkPath = Path(distFolder/apkName)
-
     alignedApkPath = Path(distFolder/"aligned.apk")
-    zipAlignCommand = 'zipalign -p -f -v 4 '
+
     argApk = f'{srcApkPath} {alignedApkPath}'
+
+
+
+    osName = sys.platform
+    zipAlignCommand = ""
+
+    if osName.startswith('win'):
+
+        whichZipalign = shutil.which("zipalign")
+        if not whichZipalign:
+            print('you have to download zipalign and add it to the Environment Variables ')
+
+
+        zipAlignCommand = f'zipalign -p -f -v 4 {argApk}'
+
+
+
+    else:
+        currScript = os.path.dirname(__file__)
+        homeDir = Path(currScript).parent.absolute()
+
+        whichZipalign = shutil.which("zipalign")
+        if not whichZipalign:
+            whichApktool = shutil.which("/usr/local/bin/zipalign")
+            if not whichApktool:
+                print('you have to download zipalign and add it to the environment path ')
+
+
+        zipAlignCommand = [
+            whichZipalign,"-p",
+            "-f","-v",
+            "4",argApk
+        ]
+
+
 
     for i in range(4):
         if exists(srcApkPath) and i == 3:
-            process = os.system( zipAlignCommand + argApk )
+            process = os.system(zipAlignCommand)
             break
         time.sleep(1)
 
