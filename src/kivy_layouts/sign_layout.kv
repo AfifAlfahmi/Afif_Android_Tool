@@ -23,9 +23,9 @@
                 size: self.size
         Label:
             text: "Sign Apk"
+            font_size:root.width*0.02
             size_hint: None, None # <---
-            pos_hint: {"x":0.495, "top":1.05}
-            font_size: '18dp'
+            pos_hint: {"center_x":0.5, "center_y":0.95}
         FloatLayout:
 
             canvas.before:
@@ -41,6 +41,7 @@
             size_hint: None, None # <---
             Button
                 text: "Select Apk"
+                font_size:root.width*0.018
                 pos_hint:{"center_x": .24,"y":.86}
                 size:root.width*0.135,root.height*0.08
                 id: uploadApkBtn
@@ -50,16 +51,18 @@
                 size:self.parent.width*0.26,self.parent.height*0.08
                 size_hint: None, None # <---
                 pos_hint: {"x":0.35, "y":.87}
+                font_size:root.width*0.018
+                halign: "center"
             Label:
                 text: "Test Sign"
-                font_size:20
+                font_size:root.width*0.02
                 pos_hint:{"center_x": .24,"y":.72}
                 size:root.width*0.15,root.height*0.10
 
                 size_hint: None, None # <---
             Label:
                 text: "Prod Sign"
-                font_size:20
+                font_size:root.width*0.02
                 pos_hint:{"center_x": .45,"y":.72}
                 size:root.width*0.15,root.height*0.10
 
@@ -68,7 +71,6 @@
             CheckBox:
                 id: testSignChBox
                 group:"signType"
-
                 pos_hint:{"center_x": .325,"y":.712}
                 size:root.width*0.15,root.height*0.10
 
@@ -113,6 +115,7 @@
 
                 Button
                     text: "Select key store"
+                    font_size:root.width*0.016
                     pos_hint:{"center_x": .23,"y":.8}
                     size:root.width*0.135,root.height*0.08
                     id: selCertBtn
@@ -127,6 +130,8 @@
                     size:self.parent.width*0.39,self.parent.height*0.15
                     size_hint: None, None # <---
                     #size_hint: 0.04, 0.03
+                    font_size:root.width*0.018
+                    halign: "center"
 
 
 
@@ -135,7 +140,7 @@
 
 
                 Label:
-                    text:"store Pass: "
+                    text:"Store pass: "
                     font_size: root.width*0.025
 
                     pos_hint: {"x":0.17, "top":0.75}
@@ -152,6 +157,8 @@
                     size:self.parent.width*0.39,self.parent.height*0.15
                     size_hint: None, None # <---
                     #size_hint: 0.04, 0.03
+                    font_size:root.width*0.018
+                    halign: "center"
 
                 Label:
                     text:"Alias:"
@@ -170,8 +177,10 @@
                     size:self.parent.width*0.39,self.parent.height*0.15
                     size_hint: None, None # <---
                     #size_hint: 0.04, 0.03
+                    font_size:root.width*0.018
+                    halign: "center"
                 Label:
-                    text:"keyPass: "
+                    text:"Key pass: "
                     font_size: root.width*0.025
 
                     pos_hint: {"x":0.17, "top":0.35}
@@ -188,6 +197,8 @@
                     size:self.parent.width*0.39,self.parent.height*0.15
                     size_hint: None, None # <---
                     #size_hint: 0.04, 0.03
+                    font_size:root.width*0.018
+                    halign: "center"
             Label:
                 text:""
                 id:sign_res_status
@@ -196,12 +207,14 @@
                 size_hint: None, None # <---
             Button
                 text: "Sign"
+                font_size:root.width*0.018
                 pos_hint:{"center_x": .385,"center_y":.15}
                 size:root.width*0.15,root.height*0.05
                 id: signApkBtn
                 size_hint: None, None # <---
             Button
                 text: "New Cert"
+                font_size:root.width*0.018
                 pos_hint:{"center_x": .385,"center_y":.09}
                 size:root.width*0.15,root.height*0.05
                 id: newCertBtn

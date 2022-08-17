@@ -1,11 +1,6 @@
-import shutil
-import zipfile
-import tempfile
+
 import os,re
 import pathlib
-
-
-
 
 
 
@@ -61,20 +56,6 @@ def logFunName(project,packageName):
                                                 if not smaliFileName.__contains__('$'):
 
                                                     logClassMethodName(smaliFile)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
