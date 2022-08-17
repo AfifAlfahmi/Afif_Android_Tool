@@ -49,10 +49,19 @@ def screenCap(device,dest):
 
 def getPackages(device):
     getAppsPacksComm = "adb shell pm list packages"
-    procPackages = subprocess.Popen(getAppsPacksComm, shell=True, stdout=subprocess.PIPE)
-    packages = procPackages.communicate()
-    splitedPackges = packages[0].splitlines()
-    return splitedPackges
+    client = AdbClient(host="127.0.0.1", port=5037)
+    devices = client.devices()
+    dev1 = devices[0]
+    #procPackages = subprocess.Popen(getAppsPacksComm, shell=True, stdout=subprocess.PIPE)
+    procPackages = dev1.shell('pm list packages')
+    procPackages = procPackages.splitlines()
+
+
+    print(f'packages {type(procPackages[0])}')
+
+    # packages = procPackages.communicate()
+    # splitedPackges = packages[0].splitlines()
+    return procPackages
 
 
 
