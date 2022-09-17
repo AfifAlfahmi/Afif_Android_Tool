@@ -21,9 +21,11 @@ Afif Android Tool is a tool for signing, patching, and analyzing Android Apps, i
 <code>cd Afif_Android_Tool</code>
 <br>
 
+
+
  <hr>
 
-### optional
+### Optional
 
 It’s recommended to create a new virtual environment to separates the dependencies of different projects
  
@@ -44,7 +46,7 @@ linux or macOS
 
  <hr>
 
-### required 
+### Required 
 
 
 install the required dependencies
