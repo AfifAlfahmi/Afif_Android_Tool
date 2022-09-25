@@ -1,4 +1,3 @@
-import os
 import time
 from pathlib import Path
 
@@ -6,22 +5,21 @@ from kivy.uix.widget import Widget
 from kivy.lang import Builder
 from plyer import filechooser
 
-from src.logs_patch import logFunName
-from src.manifest_parser import getPackageName, openManifest
-from src.patch_apk import patchManifestDebuggable
-from src.python.Certificate import Certificate
-from src.python.Dynamic import Dynamic
-from src.python.Sidebar import Sidebar
-from src.python.Sign import Sign
-from src.python.Patch import Patch
-from src.signer_script import generateCert, signApkProd, decompileApk, getApkDestinationFolder, buildApk, buildApk, \
-    decompileApk, zipAlignApk
+from scripts.logs_patch import logFunName
+from scripts.manifest_parser import getPackageName, openManifest
+from scripts.patch_apk import patchManifestDebuggable
+from Certificate import Certificate
+from Dynamic import Dynamic
+from Sidebar import Sidebar
+from Sign import Sign
+from Patch import Patch
+
 from kivy.clock import Clock
-
 from threading import Thread
-from time import sleep
 
-Builder.load_file("../kivy_layouts/apk.kv")
+from scripts.signer_script import signer_script
+
+Builder.load_file("kivy_layouts/apk.kv")
 
 class Apk(Widget):
 
@@ -30,8 +28,8 @@ class Apk(Widget):
     patchLayoutDisplayed = False
     dynamicLayoutDisplayed = False
     logFunctions = True
-    isPatched = False
-    isBuilt = False
+    inBuild = False
+
     interval = None
 
 
@@ -86,7 +84,6 @@ class Apk(Widget):
 
 
         filechooser.open_file(on_selection=self.fileSelected)
-        print("file uploaded")
         self.selectedApk = Path(self.selectedApk)
         if type == "sign":
            self.signLayout.apk_path_et.text = self.selectedApk.name
@@ -141,13 +138,15 @@ class Apk(Widget):
         if not self.selectedApk == "":
             self.progressBar.value = 0
             self.progressBar.opacity = 1
-            print(f"{decompileApk(self.selectedApk, True)}")
+            thread = Thread(target=signer_script.decompileApk, args=(signer_script,self.selectedApk,True,))
+            thread.start()
+            #print(f"{decompileApk(self.selectedApk, True)}")
             self.progressLabel.text = "decompiling..."
             # thread = Thread(target=self.threaded_function, args=(10,))
             # thread.start()
             # thread.join()
             # print("thread finished...exiting")
-            self.interval = Clock.schedule_interval(self.next, 1)
+            self.interval = Clock.schedule_interval(self.next,1)
 
         else:
             self.progressLabel.text = "Apk not selected"
@@ -161,34 +160,44 @@ class Apk(Widget):
     def patchApkOptions(self):
 
         #projectPath = Path(srcDir/"deb_tool")
-        projectPath = getApkDestinationFolder(self.selectedApk)
+        projectPath = signer_script.getApkDestinationFolder(self.selectedApk)
         packageName = getPackageName(self,openManifest(self,projectPath))
 
         if self.logFunctions:
             logFunName(projectPath, packageName)
             patchManifestDebuggable(openManifest(self,projectPath))
 
-        self.isPatched = True
+        signer_script.isPatched = True
 
     def next(self, dt):
         value = self.progressBar.value
-        if value < 100:
-
+        if value < 100 :
             self.progressBar.value += 5
-        if value == 100 and not self.isPatched:
+
+        if  signer_script.isDecompiled and not signer_script.isPatched:
+            print('decompiled seccucfly')
             self.progressLabel.text = "patching..."
             self.progressBar.value = 0
             self.patchApkOptions()
 
-        if self.progressBar.value == 60 and self.isPatched and not self.isBuilt:
-            self.progressLabel.text = "building.."
+
+        # if value == 100 and not signer_script.isPatched:
+        #     self.progressLabel.text = "patching..."
+        #     self.progressBar.value = 0
+        #     self.patchApkOptions()
+
+        if signer_script.isPatched and not signer_script.isBuilt and not self.inBuild and self.progressBar.value >= 40:
+            self.progressLabel.text = "building..."
             self.progressBar.value = 0
-            projectPath = getApkDestinationFolder(self.selectedApk)
-            buildApk(projectPath)
-            self.isBuilt = True
-        if self.progressBar.value == 90 and   self.isBuilt and self.isPatched:
-            time.sleep(2)
-            zipAlignApk(self.selectedApk)
+            projectPath = signer_script.getApkDestinationFolder(self.selectedApk)
+            thread = Thread(target=signer_script.buildApk,args=(signer_script,projectPath,))
+            thread.start()
+            #buildApk(projectPath)
+            #signer_script.isBuilt = True
+            self.inBuild = True
+        if  signer_script.isBuilt and signer_script.isPatched:
+            time.sleep(1)
+            # zipAlignApk(self.selectedApk)
             self.interval.cancel()
             self.progressBar.opacity = 0
             self.progressLabel.text = "Done"

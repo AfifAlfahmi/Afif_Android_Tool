@@ -3,10 +3,9 @@ from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.uix.widget import Widget
 
-from src.python import Apk
-from src.signer_script import signApkTest, signApkProd
+from scripts.signer_script import signer_script
 
-Builder.load_file("../kivy_layouts/sign_layout.kv")
+Builder.load_file("kivy_layouts/sign_layout.kv")
 
 class Sign(Widget):
     keyPathET = ObjectProperty(None)
@@ -47,14 +46,14 @@ class Sign(Widget):
                 self.sign_res_status.text = self.signResult
 
             else:
-                self.signResult = signApkProd(self.apkFilePath, self.certFilePath, storePass, keyPass, alias)
+                self.signResult = signer_script.signApkProd(self.apkFilePath, self.certFilePath, storePass, keyPass, alias)
                 self.sign_res_status.text = self.signResult
 
         else:
             if not self.apkFilePath:
                 self.sign_res_status.text = "empty apk path"
             else:
-                self.signResult = signApkTest(self.apkFilePath)
+                self.signResult = signer_script.signApkTest(self.apkFilePath)
                 self.sign_res_status.text = self.signResult
 
     def on_checkbox_Active(self,checkboxInstance, isActive):

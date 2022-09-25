@@ -1,15 +1,12 @@
 import os
 import time
 
-from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.uix.widget import Widget
 
-from src.files import getApk
 from kivy.clock import Clock
 
-Builder.load_file("../kivy_layouts/file.kv")
-from kivy.uix.button import Button
+Builder.load_file("kivy_layouts/file.kv")
 
 from ppadb.client import Client as AdbClient
 from plyer import filechooser
