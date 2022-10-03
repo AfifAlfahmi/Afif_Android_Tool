@@ -3,7 +3,6 @@ from pathlib import Path
 
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
-from plyer import filechooser
 
 from scripts.logs_patch import logFunName
 from scripts.manifest_parser import getPackageName, openManifest
@@ -16,8 +15,8 @@ from Patch import Patch
 
 from kivy.clock import Clock
 from threading import Thread
-
 from scripts.signer_script import signer_script
+import easygui
 
 Builder.load_file("kivy_layouts/apk.kv")
 
@@ -83,23 +82,36 @@ class Apk(Widget):
     def uploadApk(self,type):
 
 
-        filechooser.open_file(on_selection=self.fileSelected)
-        self.selectedApk = Path(self.selectedApk)
-        if type == "sign":
-           self.signLayout.apk_path_et.text = self.selectedApk.name
-           self.signLayout.apkFilePath = self.selectedApk
+        #filechooser.open_file(on_selection=self.fileSelected)
+        print('before calling openbox')
+        selectedFile = easygui.fileopenbox(msg="Choose a file",default=r"C:\Users\user\.atom\*")
+        print(f'after calling openbox {selectedFile}')
 
-        elif type == "patch":
-           self.patchLayout.apk_path_et.text = self.selectedApk.name
+        self.fileSelected(selectedFile)
 
-        else:
-            self.dynamic.apk_path_anyl_et.text = self.selectedApk.name
-            self.dynamic.apkFilePath = self.selectedApk
+        if(not self.selectedApk == ""):
+            self.selectedApk = Path(self.selectedApk)
+            if type == "sign":
+                self.signLayout.apk_path_et.text = self.selectedApk.name
+                self.signLayout.apkFilePath = self.selectedApk
+
+            elif type == "patch":
+                self.patchLayout.apk_path_et.text = self.selectedApk.name
+
+            else:
+                print(f'selectedApk {self.selectedApk}')
+
+                self.dynamic.apk_path_anyl_et.text = self.selectedApk.name
+                self.dynamic.apkFilePath = self.selectedApk
+
+
+
 
 
 
     def uploadCert(self):
-        filechooser.open_file(on_selection=self.fileSelected)
+        selectedFile = easygui.fileopenbox(msg="Choose a file", default=r"C:\Users\user\.atom\*")
+        self.fileSelected(selectedFile)
 
 
     def fileSelected(self, selection):
@@ -107,20 +119,21 @@ class Apk(Widget):
         # print(selection)
         self.signLayout.sign_res_status.text = ""
         if selection:
-            if selection[0].endswith(".apk"):
-                self.selectedApk = selection[0]
+            if selection.endswith(".apk"):
+                self.selectedApk = selection
 
-            elif  selection[0].endswith(".jks") or selection[0].endswith(".KEYSTORE") or selection[0].endswith(".keystore"):
-                self.selectedCert = Path(selection[0])
+            elif  selection.endswith(".jks") or selection.endswith(".KEYSTORE") or selection.endswith(".keystore"):
+                self.selectedCert = Path(selection)
                 self.signLayout.keyPathET.text = self.selectedCert.name
                 self.signLayout.certFilePath = self.selectedCert
                 #self.signApkValidation()
             else:
-                print(f'file extension not supported  {selection[0]}')
+                print(f'file extension not supported  {selection}')
                 # self.decompileApkBtn.opacity = 0
                 # self.log_funs_label.opacity = 1
                 # self.log_funs_check_box.opacity = 1
                 # self.debugApkBtn.opacity = 1
+
 
     def on_checkbox_active(self,checkbox, value):
         if value == True:

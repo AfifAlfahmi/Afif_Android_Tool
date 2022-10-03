@@ -373,7 +373,7 @@ class signer_script :
      distFolder = Path(projectPath / "dist")
      srcApkPath = Path(distFolder / apkName)
      print(f'apk file name: {apkName}')
-     alignedApkPath = Path(distFolder / "aligned.apk")
+     alignedApkPath = Path(distFolder / "tool-release-aligned.apk")
 
      argApk = f'{srcApkPath} {alignedApkPath}'
 

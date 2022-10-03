@@ -9,7 +9,7 @@ from kivy.clock import Clock
 Builder.load_file("kivy_layouts/file.kv")
 
 from ppadb.client import Client as AdbClient
-from plyer import filechooser
+import easygui
 
 class File(Widget):
     selectedFile = ""
@@ -30,13 +30,14 @@ class File(Widget):
 
 
     def uploadFile(self):
-        filechooser.open_file(on_selection=self.fileSelected)
+        selectedFile = easygui.fileopenbox(msg="Choose a file", default=r"C:\Users\user\.atom\*")
+        self.fileSelected(selectedFile)
 
     def fileSelected(self, selection):
 
         if selection:
 
-            self.selectedFile = selection[0]
+            self.selectedFile = selection
             self.selFileBtn.text = os.path.basename(self.selectedFile)
 
 

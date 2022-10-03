@@ -52,7 +52,7 @@
                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                 halign: "center"
             Label:
-                text: "Log Functions Names"
+                text: "Log names of functions"
                 id:log_funs_label
                 size:root.width*0.08,self.parent.height*0.05
                 size_hint: None, None # <---
@@ -91,7 +91,7 @@
 
 
             Button
-                text: "Make it debuggable"
+                text: "Patch"
 
                 pos_hint:{"center_x": .5,"center_y":.37}
                 size:root.width*0.175,root.height*0.07
