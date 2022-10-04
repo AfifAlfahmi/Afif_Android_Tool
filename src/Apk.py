@@ -203,7 +203,7 @@ class Apk(Widget):
             self.progressLabel.text = "building..."
             self.progressBar.value = 0
             projectPath = signer_script.getApkDestinationFolder(self.selectedApk)
-            thread = Thread(target=signer_script.buildApk,args=(signer_script,projectPath,))
+            thread = Thread(target=signer_script.buildApk,args=(signer_script,projectPath,self.selectedApk,))
             thread.start()
             #buildApk(projectPath)
             #signer_script.isBuilt = True

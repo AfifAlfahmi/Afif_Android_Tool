@@ -315,7 +315,7 @@ class signer_script :
 
      return destDir
 
- def buildApk(self,projectPath):
+ def buildApk(self,projectPath,selectedApk):
 
      # Zip
      # print("start APK Building")
@@ -362,18 +362,18 @@ class signer_script :
      print('build command finished ')
      self.isBuilt = True
 
-     self.zipAlignApk(projectPath)
+     self.zipAlignApk(projectPath,selectedApk)
 
 
- def zipAlignApk(projectPath):
+ def zipAlignApk(projectPath,selectedApk):
 
      # projectPath = getApkDestinationFolder(selectedApk)
-     apkName = "tool-release.apk"
+     apkName = Path(selectedApk).name
      # tool - release.apk
      distFolder = Path(projectPath / "dist")
      srcApkPath = Path(distFolder / apkName)
      print(f'apk file name: {apkName}')
-     alignedApkPath = Path(distFolder / "tool-release-aligned.apk")
+     alignedApkPath = Path(distFolder / f"{apkName}-aligned.apk")
 
      argApk = f'{srcApkPath} {alignedApkPath}'
 
@@ -403,7 +403,7 @@ class signer_script :
          zipAlignCommand = [
              whichZipalign, "-p",
              "-f", "-v",
-             "4", argApk
+             "4", srcApkPath,alignedApkPath
          ]
 
      for i in range(4):
