@@ -373,7 +373,7 @@ class signer_script :
      distFolder = Path(projectPath / "dist")
      srcApkPath = Path(distFolder / apkName)
      print(f'apk file name: {apkName}')
-     alignedApkPath = Path(distFolder / f"{apkName}-aligned.apk")
+     alignedApkPath = Path(distFolder / f"{apkName.split('.')[0]}-aligned.apk")
 
      argApk = f'{srcApkPath} {alignedApkPath}'
 
@@ -391,14 +391,12 @@ class signer_script :
 
 
      else:
-         currScript = os.path.dirname(__file__)
-         homeDir = Path(currScript).parent.absolute()
 
          whichZipalign = shutil.which("zipalign")
          if not whichZipalign:
              whichApktool = shutil.which("/usr/local/bin/zipalign")
              if not whichApktool:
-                 print('you have to download zipalign and add it to the environment path ')
+                 print('you have to download zipalign and add it to the environment path')
 
          zipAlignCommand = [
              whichZipalign, "-p",
@@ -409,8 +407,7 @@ class signer_script :
      for i in range(4):
          if exists(srcApkPath) and i == 3:
              print('found apk in dist')
-
-             os.system(zipAlignCommand)
+             subprocess.check_output(zipAlignCommand, 512, stdin=None, stderr=None, timeout=15, shell=False)
              break
          time.sleep(1)
 

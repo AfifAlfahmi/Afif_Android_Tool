@@ -1,5 +1,8 @@
 import time
 from pathlib import Path
+import sys
+from plyer import filechooser
+import easygui
 
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
@@ -16,7 +19,6 @@ from Patch import Patch
 from kivy.clock import Clock
 from threading import Thread
 from scripts.signer_script import signer_script
-import easygui
 
 Builder.load_file("kivy_layouts/apk.kv")
 
@@ -81,13 +83,13 @@ class Apk(Widget):
 
     def uploadApk(self,type):
 
+        osName = sys.platform
+        if osName.startswith('win'):
+            selectedFile = easygui.fileopenbox(msg="Choose a file", default=r"C:\Users\user\.atom\*")
+            self.fileSelected(selectedFile)
+        else:
+            filechooser.open_file(on_selection=self.fileSelected)
 
-        #filechooser.open_file(on_selection=self.fileSelected)
-        print('before calling openbox')
-        selectedFile = easygui.fileopenbox(msg="Choose a file",default=r"C:\Users\user\.atom\*")
-        print(f'after calling openbox {selectedFile}')
-
-        self.fileSelected(selectedFile)
 
         if(not self.selectedApk == ""):
             self.selectedApk = Path(self.selectedApk)
@@ -104,21 +106,25 @@ class Apk(Widget):
                 self.dynamic.apk_path_anyl_et.text = self.selectedApk.name
                 self.dynamic.apkFilePath = self.selectedApk
 
-
-
-
-
-
     def uploadCert(self):
-        selectedFile = easygui.fileopenbox(msg="Choose a file", default=r"C:\Users\user\.atom\*")
-        self.fileSelected(selectedFile)
+        osName = sys.platform
+        if osName.startswith('win'):
+            selectedFile = easygui.fileopenbox(msg="Choose a file", default=r"C:\Users\user\.atom\*")
+            self.fileSelected(selectedFile)
+        else:
+            filechooser.open_file(on_selection=self.fileSelected)
+
 
 
     def fileSelected(self, selection):
 
-        # print(selection)
+        osName = sys.platform
         self.signLayout.sign_res_status.text = ""
         if selection:
+            if not osName.startswith('win'):
+                selection = selection[0]
+
+
             if selection.endswith(".apk"):
                 self.selectedApk = selection
 
