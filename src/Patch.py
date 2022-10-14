@@ -5,7 +5,7 @@ from kivy.uix.widget import Widget
 
 
 
-Builder.load_file("../kivy_layouts/patch.kv")
+Builder.load_file("kivy_layouts/patch.kv")
 
 class Patch(Widget):
     apk_path_et = ObjectProperty(None)

@@ -1,10 +1,7 @@
-
-
-import shutil
 import pathlib
 import re
-from src.model.Activity import Activity
-from src.model.Receiver import Receiver
+from scripts.model.Activity import Activity
+from scripts.model.Receiver import Receiver
 
 #project = "src\deb_tool"
 

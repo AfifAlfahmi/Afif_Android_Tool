@@ -1,27 +1,26 @@
-import os
 import time
 from pathlib import Path
+import sys
+from plyer import filechooser
+
 
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
-from plyer import filechooser
 
-from src.logs_patch import logFunName
-from src.manifest_parser import getPackageName, openManifest
-from src.patch_apk import patchManifestDebuggable
-from src.python.Certificate import Certificate
-from src.python.Dynamic import Dynamic
-from src.python.Sidebar import Sidebar
-from src.python.Sign import Sign
-from src.python.Patch import Patch
-from src.signer_script import generateCert, signApkProd, decompileApk, getApkDestinationFolder, buildApk, buildApk, \
-    decompileApk, zipAlignApk
+from scripts.logs_patch import logFunName
+from scripts.manifest_parser import getPackageName, openManifest
+from scripts.patch_apk import patchManifestDebuggable
+from Certificate import Certificate
+from Dynamic import Dynamic
+from Sidebar import Sidebar
+from Sign import Sign
+from Patch import Patch
+
 from kivy.clock import Clock
-
 from threading import Thread
-from time import sleep
+from scripts.signer_script import signer_script
 
-Builder.load_file("../kivy_layouts/apk.kv")
+Builder.load_file("kivy_layouts/apk.kv")
 
 class Apk(Widget):
 
@@ -30,8 +29,8 @@ class Apk(Widget):
     patchLayoutDisplayed = False
     dynamicLayoutDisplayed = False
     logFunctions = True
-    isPatched = False
-    isBuilt = False
+    inBuild = False
+
     interval = None
 
 
@@ -84,46 +83,65 @@ class Apk(Widget):
 
     def uploadApk(self,type):
 
-
-        filechooser.open_file(on_selection=self.fileSelected)
-        print("file uploaded")
-        self.selectedApk = Path(self.selectedApk)
-        if type == "sign":
-           self.signLayout.apk_path_et.text = self.selectedApk.name
-           self.signLayout.apkFilePath = self.selectedApk
-
-        elif type == "patch":
-           self.patchLayout.apk_path_et.text = self.selectedApk.name
-
+        osName = sys.platform
+        if osName.startswith('win'):
+            import easygui
+            selectedFile = easygui.fileopenbox(msg="Choose a file", default=r"C:\Users\user\.atom\*")
+            self.fileSelected(selectedFile)
         else:
-            self.dynamic.apk_path_anyl_et.text = self.selectedApk.name
-            self.dynamic.apkFilePath = self.selectedApk
+            filechooser.open_file(on_selection=self.fileSelected)
 
 
+        if(not self.selectedApk == ""):
+            self.selectedApk = Path(self.selectedApk)
+            if type == "sign":
+                self.signLayout.apk_path_et.text = self.selectedApk.name
+                self.signLayout.apkFilePath = self.selectedApk
+
+            elif type == "patch":
+                self.patchLayout.apk_path_et.text = self.selectedApk.name
+
+            else:
+                print(f'selectedApk {self.selectedApk}')
+
+                self.dynamic.apk_path_anyl_et.text = self.selectedApk.name
+                self.dynamic.apkFilePath = self.selectedApk
 
     def uploadCert(self):
-        filechooser.open_file(on_selection=self.fileSelected)
+        osName = sys.platform
+        if osName.startswith('win'):
+            import easygui
+            selectedFile = easygui.fileopenbox(msg="Choose a file", default=r"C:\Users\user\.atom\*")
+            self.fileSelected(selectedFile)
+        else:
+            filechooser.open_file(on_selection=self.fileSelected)
+
 
 
     def fileSelected(self, selection):
 
-        # print(selection)
+        osName = sys.platform
         self.signLayout.sign_res_status.text = ""
         if selection:
-            if selection[0].endswith(".apk"):
-                self.selectedApk = selection[0]
+            if not osName.startswith('win'):
+                selection = selection[0]
 
-            elif  selection[0].endswith(".jks") or selection[0].endswith(".KEYSTORE") or selection[0].endswith(".keystore"):
-                self.selectedCert = Path(selection[0])
+
+            if selection.endswith(".apk"):
+                self.selectedApk = selection
+
+            elif  selection.endswith(".jks") or selection.endswith(".KEYSTORE") or selection.endswith(".keystore"):
+                self.selectedCert = Path(selection)
                 self.signLayout.keyPathET.text = self.selectedCert.name
                 self.signLayout.certFilePath = self.selectedCert
                 #self.signApkValidation()
             else:
-                print(f'file extension not supported  {selection[0]}')
+                print(f'file extension not supported  {selection}')
                 # self.decompileApkBtn.opacity = 0
                 # self.log_funs_label.opacity = 1
                 # self.log_funs_check_box.opacity = 1
                 # self.debugApkBtn.opacity = 1
+
 
     def on_checkbox_active(self,checkbox, value):
         if value == True:
@@ -141,13 +159,15 @@ class Apk(Widget):
         if not self.selectedApk == "":
             self.progressBar.value = 0
             self.progressBar.opacity = 1
-            print(f"{decompileApk(self.selectedApk, True)}")
+            thread = Thread(target=signer_script.decompileApk, args=(signer_script,self.selectedApk,True,))
+            thread.start()
+            #print(f"{decompileApk(self.selectedApk, True)}")
             self.progressLabel.text = "decompiling..."
             # thread = Thread(target=self.threaded_function, args=(10,))
             # thread.start()
             # thread.join()
             # print("thread finished...exiting")
-            self.interval = Clock.schedule_interval(self.next, 1)
+            self.interval = Clock.schedule_interval(self.next,1)
 
         else:
             self.progressLabel.text = "Apk not selected"
@@ -161,34 +181,44 @@ class Apk(Widget):
     def patchApkOptions(self):
 
         #projectPath = Path(srcDir/"deb_tool")
-        projectPath = getApkDestinationFolder(self.selectedApk)
+        projectPath = signer_script.getApkDestinationFolder(self.selectedApk)
         packageName = getPackageName(self,openManifest(self,projectPath))
 
         if self.logFunctions:
             logFunName(projectPath, packageName)
             patchManifestDebuggable(openManifest(self,projectPath))
 
-        self.isPatched = True
+        signer_script.isPatched = True
 
     def next(self, dt):
         value = self.progressBar.value
-        if value < 100:
-
+        if value < 100 :
             self.progressBar.value += 5
-        if value == 100 and not self.isPatched:
+
+        if  signer_script.isDecompiled and not signer_script.isPatched:
+            print('decompiled seccucfly')
             self.progressLabel.text = "patching..."
             self.progressBar.value = 0
             self.patchApkOptions()
 
-        if self.progressBar.value == 60 and self.isPatched and not self.isBuilt:
-            self.progressLabel.text = "building.."
+
+        # if value == 100 and not signer_script.isPatched:
+        #     self.progressLabel.text = "patching..."
+        #     self.progressBar.value = 0
+        #     self.patchApkOptions()
+
+        if signer_script.isPatched and not signer_script.isBuilt and not self.inBuild and self.progressBar.value >= 40:
+            self.progressLabel.text = "building..."
             self.progressBar.value = 0
-            projectPath = getApkDestinationFolder(self.selectedApk)
-            buildApk(projectPath)
-            self.isBuilt = True
-        if self.progressBar.value == 90 and   self.isBuilt and self.isPatched:
-            time.sleep(2)
-            zipAlignApk(self.selectedApk)
+            projectPath = signer_script.getApkDestinationFolder(self.selectedApk)
+            thread = Thread(target=signer_script.buildApk,args=(signer_script,projectPath,self.selectedApk,))
+            thread.start()
+            #buildApk(projectPath)
+            #signer_script.isBuilt = True
+            self.inBuild = True
+        if  signer_script.isBuilt and signer_script.isPatched:
+            time.sleep(1)
+            # zipAlignApk(self.selectedApk)
             self.interval.cancel()
             self.progressBar.opacity = 0
             self.progressLabel.text = "Done"

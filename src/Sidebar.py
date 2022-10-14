@@ -4,7 +4,7 @@ from kivy.lang import Builder
 from kivy.uix.widget import Widget
 
 
-Builder.load_file("../kivy_layouts/side_bar.kv")
+Builder.load_file("kivy_layouts/side_bar.kv")
 
 class Sidebar(Widget):
     keyPathET = ObjectProperty(None)

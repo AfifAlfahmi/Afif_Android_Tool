@@ -1,22 +1,13 @@
 
 from kivy.lang import Builder
-from kivy.uix.button import Button
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
 from kivy.core.window import Window
 
-from src.files import getApk
-from src.python.Apps import Apps
-from src.python.File import File
-from src.python.Sidebar import Sidebar
-from kivymd.app import MDApp
-from kivy.uix.recycleview import RecycleView
-from kivymd.uix.list import OneLineListItem, MDList
-import shutil
-from ppadb.client import Client as AdbClient
-from functools import partial
-Builder.load_file("../kivy_layouts/device.kv")
+from Apps import Apps
+from File import File
+from Sidebar import Sidebar
+
+Builder.load_file("kivy_layouts/device.kv")
 
 
 class Device(Widget):

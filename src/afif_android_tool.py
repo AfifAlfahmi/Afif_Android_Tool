@@ -1,26 +1,18 @@
 from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
-from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.uix.button import Button
-from kivy.uix.slider import Slider
-from plyer import filechooser
 
 # class MainWindow(Screen):
 #     root = Widget()
 #     root.add_widget(Button())
 #     slider = Slider()
 #     root.add_widget(slider)
-from src.python.Apk import Apk
-from src.python.Certificate import Certificate
-from src.python.Sidebar import Sidebar
-from src.python.Sign import Sign
-from src.signer_script import *
-import types
+from Apk import Apk
+
+
 class WindowManager(ScreenManager):
     pass
 
@@ -47,7 +39,7 @@ class HomeScreen(Screen):
 
     def toDevice(self):
 
-        from src.python.Device import Device
+        from Device import Device
         self.device = Device()
         self.remove_widget(self.apk)
         self.remove_widget(self.device)
@@ -69,7 +61,7 @@ class HomeScreen(Screen):
             self.add_widget(self.apk)
 
 
-Builder.load_file("../kivy_layouts/navbar.kv")
+Builder.load_file("kivy_layouts/navbar.kv")
 
 
 class Navbar(Widget):
@@ -81,7 +73,7 @@ class SecondScreen(Screen):
     pass
 
 
-kv = Builder.load_file('../kivy_layouts/home.kv')
+kv = Builder.load_file('kivy_layouts/home.kv')
 
 class NavApp(App):
     def build(self):

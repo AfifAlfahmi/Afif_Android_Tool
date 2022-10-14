@@ -6,20 +6,19 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 
-from src.custom.FormattedLabel import FormattedLabel
-from src.manifest_parser import getPackageName, getActivities, getReceivers, openManifest
-import os
+from scripts.manifest_parser import getPackageName, getActivities, getReceivers, openManifest
 import subprocess
-from kivy.properties import ListProperty, NumericProperty
+from kivy.properties import ListProperty
+from threading import Thread
 
-from src.signer_script import getApkDestinationFolder, getApkAnylDestinationFolder, decompileApk
+from scripts.signer_script import signer_script
 
-Builder.load_file("../kivy_layouts/dynamic.kv")
+Builder.load_file("kivy_layouts/dynamic.kv")
 
 class Dynamic(Widget):
     apk_path_anyl_et = ObjectProperty(None)
     apkFilePath = ""
-    isDecompiled = False
+    inAnalysis  = False
     interval = None
 
 
@@ -47,7 +46,7 @@ class Dynamic(Widget):
         self.activitiesLayout.add_widget(self.actNameLbl)
         self.activitiesLayout.add_widget(self.actActionLbl)
         self.activitiesLayout.add_widget(self.actEmpty)
-        projectPath = getApkAnylDestinationFolder(self.apkFilePath)
+        projectPath = signer_script.getApkAnylDestinationFolder(self.apkFilePath)
 
         activities =  getActivities(self,openManifest(self,projectPath))
         receivers = getReceivers(self,openManifest(self,projectPath))
@@ -98,11 +97,20 @@ class Dynamic(Widget):
     def operationsSchedule(self):
 
         self.analysis_progress_bar.value = 0
-        self.analysis_progress_bar.opacity = 1
+
         apkPath = self.apkFilePath
-        decompileApk(apkPath, False)
-        self.anal_progress_label.text = "decompiling..."
-        self.interval = Clock.schedule_interval(self.next, 1)
+
+        if (apkPath == ""):
+            self.anal_progress_label.text = "Apk not selected"
+        else:
+            # signer_script.decompileApk(signer_script,apkPath, False)
+            print(f'not empty apk path {apkPath}')
+            signer_script.isDecompiled = False
+            thread = Thread(target=signer_script.decompileApk, args=(signer_script, apkPath, False,))
+            thread.start()
+            self.anal_progress_label.text = "decompiling..."
+            self.interval = Clock.schedule_interval(self.next, 1)
+            self.analysis_progress_bar.opacity = 1
 
     def next(self, dt):
         value = self.analysis_progress_bar.value
@@ -110,12 +118,18 @@ class Dynamic(Widget):
         if value < 100:
             self.analysis_progress_bar.value += 5
 
-        if value == 100:
-            self.isDecompiled = True
+        if signer_script.isDecompiled and not self.inAnalysis:
             self.analysis_progress_bar.value = 0
             self.anal_progress_label.text = "analysis..."
+            self.inAnalysis = True
 
-        if value == 30 and self.isDecompiled:
+
+        # if value == 100:
+        #     self.isDecompiled = True
+        #     self.analysis_progress_bar.value = 0
+        #     self.anal_progress_label.text = "analysis..."
+
+        if value == 30 and signer_script.isDecompiled:
 
             self.analysisApk()
             self.interval.cancel()

@@ -3,9 +3,9 @@ from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.uix.widget import Widget
 
-from src.signer_script import generateCert
+from scripts.signer_script import signer_script
 
-Builder.load_file("../kivy_layouts/certificate.kv")
+Builder.load_file("kivy_layouts/certificate.kv")
 
 class Certificate(Widget):
     outKeyFile = ObjectProperty(None)
@@ -48,7 +48,7 @@ class Certificate(Widget):
 
 
         else:
-          createCertRes = generateCert(outKeyFile, c_name, "dkkfg", org, loc,country, keyPass,
+          createCertRes = signer_script.generateCert(outKeyFile, c_name, "dkkfg", org, loc,country, keyPass,
                      storePass, alias)
           self.cert_res_status.text = createCertRes
 
