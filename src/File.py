@@ -1,7 +1,7 @@
 import os
 import time
 import sys
-import easygui
+
 from plyer import filechooser
 
 from kivy.lang import Builder
@@ -34,6 +34,7 @@ class File(Widget):
     def uploadFile(self):
         osName = sys.platform
         if osName.startswith('win'):
+            import easygui
             selectedFile = easygui.fileopenbox(msg="Choose a file", default=r"C:\Users\user\.atom\*")
             self.fileSelected(selectedFile)
         else:

@@ -2,7 +2,7 @@ import time
 from pathlib import Path
 import sys
 from plyer import filechooser
-import easygui
+
 
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
@@ -85,6 +85,7 @@ class Apk(Widget):
 
         osName = sys.platform
         if osName.startswith('win'):
+            import easygui
             selectedFile = easygui.fileopenbox(msg="Choose a file", default=r"C:\Users\user\.atom\*")
             self.fileSelected(selectedFile)
         else:
@@ -109,6 +110,7 @@ class Apk(Widget):
     def uploadCert(self):
         osName = sys.platform
         if osName.startswith('win'):
+            import easygui
             selectedFile = easygui.fileopenbox(msg="Choose a file", default=r"C:\Users\user\.atom\*")
             self.fileSelected(selectedFile)
         else:
