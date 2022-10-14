@@ -1,16 +1,15 @@
-from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.uix.widget import Widget
 
-from src.adb_script import getPackages
-from src.files import getApk
-import time
 from kivy.clock import Clock
 
-Builder.load_file("../kivy_layouts/apps.kv")
+
+Builder.load_file("kivy_layouts/apps.kv")
 from kivy.uix.button import Button
 
 from ppadb.client import Client as AdbClient
+from threading import Thread
+from scripts.adb_script import adb_script
 
 class Apps(Widget):
 
@@ -33,10 +32,11 @@ class Apps(Widget):
         devices = client.devices()
         if len(devices) > 0:
             device = devices[0]
-            for i in getPackages(device):
+
+            for i in adb_script.getPackages(device):
                 self.btn = Button(text=str(i),size_hint_y=None, size=(180, 70), )
 
-                self.btnClone = Button(text=str("clone"), size_hint=(None, None), size=(120, 70),
+                self.btnClone = Button(text=str("Extract"), size_hint=(None, None), size=(120, 70),
                                        on_press=lambda *args, i=i: self.cloneApp(i)
                                        )
                 self.appsGradeLayout.add_widget(self.btn)
@@ -61,7 +61,16 @@ class Apps(Widget):
 
     def next(self, dt):
         self.extracting_label.text = "ext..."
-        getApk(self.package[8:])
+        thread = Thread(target=adb_script.getApk, args=(self.package[8:],))
+        thread.start()
+        # client = AdbClient(host="127.0.0.1", port=5037)
+        # devices = client.devices()
+        # dev1 = devices[0]
+        #
+        # srcApk , destApk = getApk(self.package[8:])
+        # print(f'getApp ret srcApk , destApk: {srcApk} {destApk}')
+        # dev1.pull(srcApk,'C:\\Users\\Afif_Alfahmi\\PythonProjects\\Afif_Android_Tool\\workDir')
+        #getApk(self.package[8:])
         self.interval.cancel()
         self.extracting_label.text = "Done"
 

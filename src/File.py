@@ -1,18 +1,17 @@
 import os
 import time
+import sys
 
-from kivy.properties import ObjectProperty
+from plyer import filechooser
+
 from kivy.lang import Builder
 from kivy.uix.widget import Widget
 
-from src.files import getApk
 from kivy.clock import Clock
 
-Builder.load_file("../kivy_layouts/file.kv")
-from kivy.uix.button import Button
+Builder.load_file("kivy_layouts/file.kv")
 
 from ppadb.client import Client as AdbClient
-from plyer import filechooser
 
 class File(Widget):
     selectedFile = ""
@@ -33,13 +32,23 @@ class File(Widget):
 
 
     def uploadFile(self):
-        filechooser.open_file(on_selection=self.fileSelected)
+        osName = sys.platform
+        if osName.startswith('win'):
+            import easygui
+            selectedFile = easygui.fileopenbox(msg="Choose a file", default=r"C:\Users\user\.atom\*")
+            self.fileSelected(selectedFile)
+        else:
+            filechooser.open_file(on_selection=self.fileSelected)
+
 
     def fileSelected(self, selection):
 
+        osName = sys.platform
         if selection:
+            if not osName.startswith('win'):
+                selection = selection[0]
 
-            self.selectedFile = selection[0]
+            self.selectedFile = selection
             self.selFileBtn.text = os.path.basename(self.selectedFile)
 
 
