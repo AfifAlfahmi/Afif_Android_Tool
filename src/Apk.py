@@ -102,7 +102,6 @@ class Apk(Widget):
                 self.patchLayout.apk_path_et.text = self.selectedApk.name
 
             else:
-                print(f'selectedApk {self.selectedApk}')
 
                 self.dynamic.apk_path_anyl_et.text = self.selectedApk.name
                 self.dynamic.apkFilePath = self.selectedApk
@@ -151,7 +150,7 @@ class Apk(Widget):
             self.logFunctions = False
 
     def threaded_function(self,arg):
-        print(f"unzipped apk")
+        print(f"")
 
         # wait 1 sec in between each thread
     def operationsSchedule(self):
@@ -196,7 +195,7 @@ class Apk(Widget):
             self.progressBar.value += 5
 
         if  signer_script.isDecompiled and not signer_script.isPatched:
-            print('decompiled seccucfly')
+            # decompiled seccucfly
             self.progressLabel.text = "patching..."
             self.progressBar.value = 0
             self.patchApkOptions()

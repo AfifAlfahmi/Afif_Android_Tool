@@ -104,7 +104,6 @@ class Dynamic(Widget):
             self.anal_progress_label.text = "Apk not selected"
         else:
             # signer_script.decompileApk(signer_script,apkPath, False)
-            print(f'not empty apk path {apkPath}')
             signer_script.isDecompiled = False
             thread = Thread(target=signer_script.decompileApk, args=(signer_script, apkPath, False,))
             thread.start()
