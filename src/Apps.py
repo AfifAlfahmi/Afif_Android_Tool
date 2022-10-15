@@ -28,19 +28,25 @@ class Apps(Widget):
 
     def downLoadApps(self):
 
-        client = AdbClient(host="127.0.0.1", port=5037)
-        devices = client.devices()
-        if len(devices) > 0:
-            device = devices[0]
+        devices = None
+        try:
+            client = AdbClient(host="127.0.0.1", port=5037)
+            devices = client.devices()
+        except:
+            print('Failed, ADB is not connected')
 
-            for i in adb_script.getPackages(device):
-                self.btn = Button(text=str(i),size_hint_y=None, size=(180, 70), )
+        if not devices is None:
+            if len(devices) > 0:
+                device = devices[0]
 
-                self.btnClone = Button(text=str("Extract"), size_hint=(None, None), size=(120, 70),
-                                       on_press=lambda *args, i=i: self.cloneApp(i)
-                                       )
-                self.appsGradeLayout.add_widget(self.btn)
-                self.appsGradeLayout.add_widget(self.btnClone)
+                for i in adb_script.getPackages(device):
+                    self.btn = Button(text=str(i), size_hint_y=None, size=(180, 70), )
+
+                    self.btnClone = Button(text=str("Extract"), size_hint=(None, None), size=(120, 70),
+                                           on_press=lambda *args, i=i: self.cloneApp(i)
+                                           )
+                    self.appsGradeLayout.add_widget(self.btn)
+                    self.appsGradeLayout.add_widget(self.btnClone)
 
 
 

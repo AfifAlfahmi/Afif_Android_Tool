@@ -26,7 +26,7 @@ from ppadb.client import Client as AdbClient
 
 class adb_script :
  def __init__(self):
-    print('self')
+    print('')
 
  def isAppInstalled(device, package):
      isInstalled = device.is_installed(package)

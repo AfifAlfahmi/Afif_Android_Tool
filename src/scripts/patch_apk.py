@@ -32,17 +32,15 @@ def patchManifestDebuggable(manifest):
 
             if line.__contains__(applicationtag):
                 inAppTag = True
-                print( 'inAppTag' )
 
             if inAppTag:
                 if line.__contains__( replacedDebugValue ):
-                    print('deb value found false')
+                    # deb value found false
                     line = line.replace(replacedDebugValue, newDebugValue)
                     debugValueFound = True
-                    print('debugTag Found')
 
                 elif line.__contains__(newDebugValue) :
-                    print('elif deb value found true')
+                    # elif deb value found true
                     debugValueFound = True
 
 
@@ -50,12 +48,12 @@ def patchManifestDebuggable(manifest):
 
 
                 if line.__contains__(replacedNativelibsValue):
-                    print('native value found false')
+                    #native value found false
                     line = line.replace(replacedNativelibsValue, newNativelibsValue)
                     nativeLibsValueFound = True
 
                 elif  line.__contains__(newNativelibsValue):
-                    print('elif native value found true')
+                    # elif native value found true
                     nativeLibsValueFound = True
 
 
@@ -67,41 +65,38 @@ def patchManifestDebuggable(manifest):
 
             if inAppTag and line.__contains__(lastAppTagSym) :
 
+                #in last app tag
                 inAppTag = False
                 inAppBlock = True
-                print('in last app tag')
                 splittedLine = re.split(r'( )', line)
                 lastChar = splittedLine[-1][-1]
                 beforLastChar = splittedLine[-1][-2]
                 lastValue = splittedLine[-1][0:-2]
-                print(f'last char {splittedLine[-1][-1]}')
-                print(f'last char 2 {splittedLine[-1][-2]}')
 
                 if not debugValueFound and not nativeLibsValueFound:
-                    print(f'appTag all values not found:')
+                    # appTag all values not found
                     line = line.replace( lastValue, lastValue + newNativelibsValue+ newDebugValue )
                     debugValueFound = True
                     nativeLibsValueFound = True
 
 
                 elif not debugValueFound:
-                    print(f'debug Value not Found:')
+                    # debug Value not Found
 
                     line = line.replace( lastValue, lastValue + newDebugValue )
-                    print(f'replaced App tag: {line}')
                     debugValueFound = True
 
                 elif not nativeLibsValueFound:
-                    print(f'native lib Value not Found')
+                    # native lib Value not Found
                     line = line.replace( lastValue, lastValue + newNativelibsValue )
 
                     nativeLibsValueFound = True
 
 
             if line.__contains__( endApplicationtag ):
+                # exit app block
                 inAppBlock = False
-                print('exit app block')
-                
+
 
             tempFile.write(line)
     tempFile.close()

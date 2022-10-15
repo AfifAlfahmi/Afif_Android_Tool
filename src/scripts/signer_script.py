@@ -12,7 +12,7 @@ from threading import Thread
 
 class signer_script :
  def __init__(self):
-     print('self')
+     print('')
 
 
 
@@ -40,7 +40,7 @@ class signer_script :
      if osName.startswith('win'):
          whichApksigner = shutil.which("apksigner")
          if not whichApksigner:
-             print('you have to download apksigner and add it to the Environment Variables ')
+             print('Failed, you have to download apksigner and add it to the Environment Variables ')
 
          apk_sign_comm = f"apksigner.bat sign --v2-signing-enabled --ks {keyPath} --ks-key-alias {alias} --ks-pass pass:{storePass} --key-pass pass:{keyPass} {apk}"
 
@@ -52,7 +52,7 @@ class signer_script :
          if not whichApksigner:
              whichApksigner = shutil.which("/usr/bin/apksigner")
              if not whichApksigner:
-                 print('you have to download apksigner and add it to the Environment path ')
+                 print('Failed, you have to download apksigner and add it to the Environment path ')
 
          apk_sign_comm = [
              whichApksigner,
@@ -67,7 +67,6 @@ class signer_script :
      p = subprocess.run(apk_sign_comm, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False)
      if p.returncode > 0:
          stdOut = p.stdout.decode("utf8")
-         print(stdOut)
 
          if stdOut.__contains__('Password verification failed'):
              result = 'Password verification failed'
@@ -92,7 +91,7 @@ class signer_script :
 
          whichApksigner = shutil.which("apksigner")
          if not whichApksigner:
-             print('you have to download apksigner and add it to the Environment Variables ')
+             print('Failed, you have to download apksigner and add it to the Environment Variables ')
 
          apk_sign_comm = f"apksigner.bat sign --v2-signing-enabled --ks {keyPath} --ks-key-alias {alias} --ks-pass pass:{storePass} --key-pass pass:{keyPass} {apk}"
 
@@ -105,7 +104,7 @@ class signer_script :
          if not whichApksigner:
              whichApksigner = shutil.which("/usr/bin/apksigner")
              if not whichApksigner:
-                 print('you have to download apksigner and add it to the Environment path ')
+                 print('Failed, you have to download apksigner and add it to the Environment path ')
 
          apk_sign_comm = [
              'apksigner',
@@ -128,7 +127,6 @@ class signer_script :
      p = subprocess.run(apk_sign_comm, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=False)
      if p.returncode > 0:
          stdOut = p.stdout.decode("utf8")
-         print(stdOut)
 
          if stdOut.__contains__('Password verification failed'):
              result = 'Password verification failed'
@@ -167,20 +165,19 @@ class signer_script :
 
          whichKeytool = shutil.which("keytool")
          if not whichKeytool:
-             print('you have to download jdk and add jdk/bin to the Environment Variables ')
+             print('Failed, you have to download jdk and add jdk/bin to the Environment Variables ')
 
          keytoolCommand = f'keytool -genkey -v -keystore {outKeyFilePath} -dname "CN={CName}, OU={orgUint}, O={org}, L={loc}, C={country}" -keypass {keyPass} -storepass {storePass} -alias {alias} -keyalg RSA -keysize 2048 -validity 10000'
 
      else:
          currScript = os.path.dirname(__file__)
          homeDir = Path(currScript).parent.absolute()
-         print(f'path keytool home {homeDir}')
 
          whichKeytool = shutil.which("keytool")
          if not whichKeytool:
              whichKeytool = shutil.which("/usr/bin/keytool")
              if not whichKeytool:
-                 print('you have to download jdk and add jdk/bin to the Environment path ')
+                 print('Failed, you have to download jdk and add jdk/bin to the Environment path ')
 
          dname = f"CN={CName}, OU={orgUint}, O={org}, L={loc}, C={country}"
          keytoolCommand = [
@@ -201,7 +198,6 @@ class signer_script :
 
      if p.returncode > 0:
          stdOut = p.stdout.decode("utf8")
-         print(stdOut)
          if stdOut.__contains__('already exists'):
              result = 'alias already exists'
 
@@ -229,11 +225,10 @@ class signer_script :
      osName = sys.platform
 
      if osName.startswith('win'):
-         print(f'os name: {osName}')
 
          whichApktool = shutil.which("apktool")
          if not whichApktool:
-             print('you have to download Apktool and add it to the Environment Variables ')
+             print('Failed, you have to download Apktool and add it to the Environment Variables ')
 
          decomipleCommand = ""
          if isPatch:
@@ -249,7 +244,7 @@ class signer_script :
          if not whichApktool:
              whichApktool = shutil.which("/usr/local/bin/apktool")
              if not whichApktool:
-                 print('you have to download Apktool and add it to the Environment path ')
+                 print('Failed, you have to download Apktool and add it to the Environment path ')
 
          if isPatch:
              decomipleCommand = [
@@ -265,8 +260,7 @@ class signer_script :
                  apkPath,
                  "-o", self.getApkAnylDestinationFolder(apk)
              ]
-     print(f'paths: {decomipleCommand}')
-
+     # decompile command start
      try:
          p = subprocess.check_output(decomipleCommand, 512, stdin=None, stderr=None, timeout=15, shell=False)
      except:
@@ -274,7 +268,7 @@ class signer_script :
          self.isDecompiled = True
 
 
-     print(f'decompil finished ')
+     # decompile command finished
 
      self.isDecompiled = True
 
@@ -300,7 +294,6 @@ class signer_script :
      homeDir = Path(script).parent.parent.absolute()
      workDir = Path(homeDir / "workDir")
      destDir = Path(workDir / appFolder)
-     print(f'destination folder: {destDir}')
 
      return destDir
 
@@ -311,7 +304,6 @@ class signer_script :
      homeDir = Path(script).parent.parent.absolute()
      workDir = Path(homeDir / "workDir/analysis")
      destDir = Path(workDir / appFolder)
-     print(f'destination anyl folder: {destDir}')
 
      return destDir
 
@@ -325,11 +317,10 @@ class signer_script :
      buildCommand = ""
 
      if osName.startswith('win'):
-         print(f'os name: {sys.platform}')
 
          whichApktool = shutil.which("apktool")
          if not whichApktool:
-             print('you have to download Apktool and add it to the Environment Variables ')
+             print('Failed, you have to download Apktool and add it to the Environment Variables ')
 
          buildCommand = f'apktool.bat b {projectPath}'
 
@@ -345,21 +336,21 @@ class signer_script :
          if not whichApktool:
              whichApktool = shutil.which("/usr/local/bin/apktool")
              if not whichApktool:
-                 print('you have to download Apktool and add it to the Environment path ')
+                 print('Failed, you have to download Apktool and add it to the Environment path ')
 
          buildCommand = [
              whichApktool,
              "b",
              projectPath
          ]
-     print('build command started ')
+     # build command start
      try:
          p = subprocess.check_output(buildCommand, 512, stdin=None, stderr=None, timeout=15, shell=False)
      except:
          TimeoutExpired: print('build time out expy')
          self.isBuilt = True
 
-     print('build command finished ')
+     # build command finished
      self.isBuilt = True
 
      self.zipAlignApk(projectPath,selectedApk)
@@ -372,7 +363,6 @@ class signer_script :
      # tool - release.apk
      distFolder = Path(projectPath / "dist")
      srcApkPath = Path(distFolder / apkName)
-     print(f'apk file name: {apkName}')
      alignedApkPath = Path(distFolder / f"{apkName.split('.')[0]}-aligned.apk")
 
      argApk = f'{srcApkPath} {alignedApkPath}'
@@ -384,7 +374,7 @@ class signer_script :
 
          whichZipalign = shutil.which("zipalign")
          if not whichZipalign:
-             print('you have to download zipalign and add it to the Environment Variables ')
+             print('Failed, you have to download zipalign and add it to the Environment Variables ')
 
          zipAlignCommand = f'zipalign -p -f -v 4 {argApk}'
 
@@ -396,7 +386,7 @@ class signer_script :
          if not whichZipalign:
              whichApktool = shutil.which("/usr/local/bin/zipalign")
              if not whichApktool:
-                 print('you have to download zipalign and add it to the environment path')
+                 print('Failed, you have to download zipalign and add it to the environment path')
 
          zipAlignCommand = [
              whichZipalign, "-p",
@@ -406,7 +396,7 @@ class signer_script :
 
      for i in range(4):
          if exists(srcApkPath) and i == 3:
-             print('found apk in dist')
+             # found apk in dist
              subprocess.check_output(zipAlignCommand, 512, stdin=None, stderr=None, timeout=15, shell=False)
              break
          time.sleep(1)

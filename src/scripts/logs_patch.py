@@ -12,11 +12,11 @@ def logFunName(project,packageName):
 
                 for subPack1 in pathlib.Path(smaliFolder).iterdir():
                     if packageName.__contains__(subPack1.name):
-                        print(f"found subPack1 com folder")
+                        #found subPack1 com folder
 
                         for subPack2 in pathlib.Path(subPack1).iterdir():
                             if packageName.__contains__(subPack2.name):
-                                print(f"found  subPack2 folder {subPack2.name}")
+                                #found  subPack2 folder
 
                                 for subPack3 in pathlib.Path(subPack2).iterdir():
 
@@ -27,7 +27,7 @@ def logFunName(project,packageName):
                                             logClassMethodName(subPack3)
 
                                     if packageName.__contains__(subPack3.name):
-                                        print(f"found subPack3 folder {subPack3.name}")
+                                        #found subPack3 folder
                                         smaliFileName = ""
                                         for smaliFile in pathlib.Path(subPack3).iterdir():
 
@@ -181,7 +181,7 @@ def  logClassMethodName(path4):
           os.remove(smaliFile.name)
           # Rename dummy file as the original file
           path = pathlib.Path(smaliFile.name).parent.resolve()
-          print(f"path for the new{path}")
+          # path for the new
           os.rename(smaliOut.name, f'{path}/{smaliFileName}')
 
 
