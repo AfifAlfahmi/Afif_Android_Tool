@@ -45,8 +45,11 @@ def logFunName(project,packageName):
 
                                                     smaliFileName = smaliFile2.name
                                                     if not smaliFileName.__contains__('$'):
+                                                        if smaliFile2.is_file():
+                                                            logClassMethodName(smaliFile2)
 
-                                                        logClassMethodName(smaliFile2)
+
+
 
                                     else:
 
@@ -62,7 +65,7 @@ def logFunName(project,packageName):
 
 def  logClassMethodName(path4):
       smaliFileName = path4.name
-      with open(path4) as smaliFile, open(f"{smaliFile.name}out.smali", "w") as smaliOut:
+      with open(path4) as smaliFile, open(f"{smaliFile.name}out_000.smali", "w") as smaliOut:
           className = ""
           methodName = ""
 

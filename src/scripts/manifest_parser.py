@@ -18,18 +18,18 @@ def openManifest(self,project):
 
 
 def getPackageName(self,manifest):
-  packageName = ""
-  package = "package="
-  with open(manifest, 'r') as f:
-      for line in f:
-
-          if line.__contains__(package):
-              apkInfoLine = line.split(' ')
-              for item in apkInfoLine:
-                  if item.__contains__("package"):
-
-                      packageName = item[9:len(item) - 1]
-                      print(f"packageName : {packageName}")
+  packageName = "org.malwarebytes.antimalware"
+  # package = "package="
+  # with open(manifest, 'r') as f:
+  #     for line in f:
+  #
+  #         if line.__contains__(package):
+  #             apkInfoLine = line.split(' ')
+  #             for item in apkInfoLine:
+  #                 if item.__contains__("package"):
+  #
+  #                     packageName = item[9:len(item) - 1]
+  #                     print(f"packageName : {packageName}")
 
 
 

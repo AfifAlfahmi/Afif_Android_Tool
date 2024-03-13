@@ -186,7 +186,7 @@ class Apk(Widget):
 
         if self.logFunctions:
             logFunName(projectPath, packageName)
-            patchManifestDebuggable(openManifest(self,projectPath))
+            #patchManifestDebuggable(openManifest(self,projectPath))
 
         signer_script.isPatched = True
 

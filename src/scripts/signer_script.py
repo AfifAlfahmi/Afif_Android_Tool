@@ -255,6 +255,7 @@ class signer_script :
              decomipleCommand = [
                  whichApktool,
                  "d",
+                 "-r",
                  apkPath,
                  "-o", self.getApkDestinationFolder(apk)
              ]

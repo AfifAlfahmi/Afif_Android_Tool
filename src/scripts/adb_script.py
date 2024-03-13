@@ -56,7 +56,7 @@ class adb_script :
      client = AdbClient(host="127.0.0.1", port=5037)
      devices = client.devices()
      dev1 = devices[0]
-     procPackages = dev1.shell('pm list packages')
+     procPackages = dev1.shell('pm list packages -3')
      procPackages = procPackages.splitlines()
      return procPackages
 
